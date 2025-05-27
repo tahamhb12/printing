@@ -90,7 +90,11 @@ nav .container .links .auth-button:hover {
 .hamburger.active span:nth-child(3) {
     transform: translateY(-9px) rotate(-45deg);
 }
-
+@media (max-width: 1024px) {
+    nav .container .links{
+        gap: 14px;
+    }
+}
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;
