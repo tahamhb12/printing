@@ -1,0 +1,604 @@
+import React, { useEffect, useState } from 'react';
+import '../styles/Dashboard.css';
+import supabase from '../helpler/supabaseClient';
+import { UserAuth } from '../AuthContext/AuthContext';
+
+// Move EditModal outside of Dashboard component
+const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpdateProduct, categories, handleEditPhotoChange, editPreviewUrl }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Edit Product</h2>
+          <button className="close-button" onClick={onClose}>&times;</button>
+        </div>
+        <form onSubmit={handleUpdateProduct} className="product-form">
+          <div className="form-group">
+            <label htmlFor="edit-photo">Update Product Photo</label>
+            <div className="photo-preview">
+              {editPreviewUrl ? (
+                <img src={editPreviewUrl} alt="Product preview" style={{width: '100px', height: '100px', objectFit: 'cover'}} />
+              ) : editFormData.image_url ? (
+                <img src={editFormData.image_url} alt="Current product" style={{width: '128px', height: '196px', objectFit: 'cover'}} />
+              ) : (
+                <div className="photo-placeholder">
+                  <span>No image</span>
+                </div>
+              )}
+            </div>
+            <input
+              type="file"
+              id="edit-photo"
+              name="photo"
+              onChange={handleEditPhotoChange}
+              accept="image/*"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-name">Product Name</label>
+            <input
+              type="text"
+              id="edit-name"
+              name="name"
+              value={editFormData.name}
+              onChange={handleEditChange}
+              placeholder="Enter product name"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-description">Description</label>
+            <textarea
+              id="edit-description"
+              name="description"
+              value={editFormData.description}
+              onChange={handleEditChange}
+              placeholder="Enter product description"
+              rows="4"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-price">Price ($)</label>
+            <input
+              type="number"
+              id="edit-price"
+              name="price"
+              value={editFormData.price}
+              onChange={handleEditChange}
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-category">Category</label>
+            <select
+              id="edit-category"
+              name="category"
+              value={editFormData.category}
+              onChange={handleEditChange}
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="submit-button">
+              Update Product
+            </button>
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState('add'); // 'add' or 'edit'
+  const [productData, setProductData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    category: '',
+  });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    category: '',
+    image_url: ''
+  });
+  const [editPreviewUrl, setEditPreviewUrl] = useState(null);
+
+
+  
+  // File states
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [editSelectedFile, setEditSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+
+  const {products,setproducts,categories} = UserAuth()
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleEditPhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEditSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditPreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Function to extract filename from Supabase public URL
+  const extractFilenameFromUrl = (url) => {
+    if (!url) return null;
+    try {
+      // Extract the filename from the Supabase storage URL
+      // URL format: https://xxx.supabase.co/storage/v1/object/public/product-images/filename
+      const urlParts = url.split('/');
+      return urlParts[urlParts.length - 1]; // Get the last part (filename)
+    } catch (error) {
+      console.error('Error extracting filename from URL:', error);
+      return null;
+    }
+  };
+
+  // Function to delete image from Supabase storage
+  const deleteImage = async (imageUrl) => {
+    try {
+      const filename = extractFilenameFromUrl(imageUrl);
+      if (!filename) {
+        console.warn('Could not extract filename from URL:', imageUrl);
+        return false;
+      }
+
+      const { error } = await supabase.storage
+        .from('product-images')
+        .remove([filename]);
+
+      if (error) {
+        console.error('Error deleting image:', error);
+        return false;
+      }
+
+      console.log('Successfully deleted image:', filename);
+      return true;
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      return false;
+    }
+  };
+
+  // Function to upload image to Supabase storage
+  const uploadImage = async (file, fileName) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) {
+        console.error('Upload error:', error);
+        return null;
+      }
+
+      // Get public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+
+      return publicUrlData.publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!selectedFile) {
+      alert('Please select an image');
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      // Generate unique filename
+      const fileExt = selectedFile.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+      
+      // Upload image
+      const imageUrl = await uploadImage(selectedFile, fileName);
+      
+      if (!imageUrl) {
+        alert('Error uploading image');
+        setUploading(false);
+        return;
+      }
+
+      // Insert product with image URL
+      const productWithImage = {
+        ...productData,
+        image_url: imageUrl
+      };
+
+      const { data, error } = await supabase
+        .from('products')
+        .insert([productWithImage])
+        .select()
+        .single();
+
+      if (error) {
+        console.log(error);
+        alert('Error adding product');
+      } else {
+        setproducts((prev) => [...prev, data]);
+        // Reset form
+        setProductData({
+          name: '',
+          description: '',
+          price: '',
+          category: '',
+        });
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        alert('Product added successfully');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error adding product');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleEdit = (product) => {
+    setSelectedProduct(product);
+    setEditFormData({
+      name: product.name || '',
+      description: product.description || '',
+      price: product.price || '',
+      category: product.category || '',
+      image_url: product.image_url || ''
+    });
+    setEditSelectedFile(null);
+    setEditPreviewUrl(null);
+    setShowEditModal(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+
+    try {
+      let updateData = {
+        name: editFormData.name,
+        price: editFormData.price,
+        description: editFormData.description,
+        category: editFormData.category
+      };
+
+      // If new image is selected, upload it and delete the old one
+      if (editSelectedFile) {
+        const fileExt = editSelectedFile.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const imageUrl = await uploadImage(editSelectedFile, fileName);
+        
+        if (!imageUrl) {
+          alert('Error uploading image');
+          setUploading(false);
+          return;
+        }
+        
+        updateData.image_url = imageUrl;
+
+        // Delete the old image after successful upload
+        if (selectedProduct.image_url) {
+          await deleteImage(selectedProduct.image_url);
+        }
+      }
+
+      const { data, error } = await supabase
+        .from("products")
+        .update(updateData)
+        .eq("id", selectedProduct.id);
+
+      if (error) {
+        console.log(error);
+        alert('Error updating product');
+      } else {
+        const updatedProductsList = products.map((pro) =>
+          pro.id === selectedProduct.id ? { ...pro, ...updateData } : pro
+        );
+        setproducts(updatedProductsList);
+        alert("Updated product");
+        setShowEditModal(false);
+        setEditSelectedFile(null);
+        setEditPreviewUrl(null);
+      }
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert('Error updating product');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    try {
+      // Find the product to get its image URL
+      const productToDelete = products.find(product => product.id === productId);
+      
+      // Delete the product from database
+      const { data, error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", productId);
+
+      if (error) {
+        console.log(error);
+        alert('Error deleting product');
+      } else {
+        // Delete the associated image from storage
+        if (productToDelete && productToDelete.image_url) {
+          await deleteImage(productToDelete.image_url);
+        }
+
+        setproducts((prev) => prev.filter((product) => product.id !== productId));
+        alert("Product Deleted");
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Error deleting product');
+    }
+  };
+
+  const renderAddProduct = () => (
+    <div className="dashboard-content">
+      <form onSubmit={handleSubmit} className="product-form">
+        <div className="form-grid">
+          <div className="form-main">
+            <div className="form-group">
+              <label htmlFor="image">Upload Image</label>
+              <div className="photo-preview">
+                {previewUrl ? (
+                  <img 
+                    src={previewUrl} 
+                    alt="Product preview" 
+                    style={{width: '176px', height: '234px', objectFit: 'cover', border: '1px solid #ddd'}} 
+                  />
+                ) : (
+                  <div className="photo-placeholder" style={{width: '150px', height: '150px', border: '2px dashed #ccc', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <span>No image selected</span>
+                  </div>
+                )}
+              </div>
+              <input 
+                type="file" 
+                id='image' 
+                accept='image/*' 
+                required 
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="name">Product Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={productData.name}
+                onChange={handleChange}
+                placeholder="Enter product name"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={productData.description}
+                onChange={handleChange}
+                placeholder="Enter product description"
+                rows="4"
+                required
+              />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="price">Price ($)</label>
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={productData.price}
+                  onChange={handleChange}
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="category">Category</label>
+                <select
+                  id="category"
+                  name="category"
+                  value={productData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="form-actions">
+          <button type="submit" className="submit-button" disabled={uploading}>
+            {uploading ? 'Adding Product...' : 'Add Product'}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+
+  const renderProductList = () => (
+    <div className="dashboard-content">
+      <div className="products-list">
+        <table className="products-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id}>
+                <td>
+                  <div className="product-thumbnail">
+                    <img 
+                      src={product.image_url || '/placeholder-image.jpg'} 
+                      alt={product.name}
+                      style={{width: '60px', height: '60px', objectFit: 'cover'}}
+                    />
+                  </div>
+                </td>
+                <td>{product.name || 'N/A'}</td>
+                <td>{product.description || 'N/A'}</td>
+                <td>{product.category || 'N/A'}</td>
+                <td>${product.price || '0.00'}</td>
+                <td>
+                  <div className="action-buttons">
+                    <button
+                      className="edit-button"
+                      onClick={() => handleEdit(product)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteProduct(product.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Product Dashboard</h1>
+        <p className="dashboard-subtitle">Manage your products</p>
+      </div>
+
+      <div className="dashboard-tabs">
+        <button
+          className={`tab-button ${activeTab === 'add' ? 'active' : ''}`}
+          onClick={() => setActiveTab('add')}
+        >
+          Add Product
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'edit' ? 'active' : ''}`}
+          onClick={() => setActiveTab('edit')}
+        >
+          Edit Products
+        </button>
+      </div>
+
+      {activeTab === 'add' && renderAddProduct()}
+      {activeTab === 'edit' && renderProductList()}
+      
+      <EditModal 
+        isOpen={showEditModal} 
+        onClose={() => setShowEditModal(false)} 
+        editFormData={editFormData}
+        handleEditChange={handleEditChange}
+        handleUpdateProduct={handleUpdateProduct}
+        handleEditPhotoChange={handleEditPhotoChange}
+        editPreviewUrl={editPreviewUrl}
+        categories={categories}
+      />
+    </div>
+  );
+};
+
+export default Dashboard;

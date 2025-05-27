@@ -1,0 +1,93 @@
+.popular-products{
+    background-image: url('./back-chair.png');
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-top: 101px;
+}
+
+.popular-products .container h1 {
+    text-align: center;
+}
+.popular-products .container .products {
+    margin-top: 50px;
+    display: flex;
+    gap: 32px;
+    overflow-x: scroll;
+    padding-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #dc3545 black;
+    scroll-behavior: smooth;
+  
+}
+.popular-products .container .products .product{
+    width: 430px;
+    height: 585px;
+    background-color: #F3CACA;
+    padding: 60px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    min-width: 373px;
+    height: 522px;
+}
+.popular-products .container .products .product:first-child{
+    background-color: #F3CACA;
+}
+.popular-products .container .products .product:nth-child(2){
+    background-color: #E0EFF6;
+}
+.popular-products .container .products .product:nth-child(3){
+    background-color: #EEEBFF;
+}
+.popular-products .container .products .product:last-child{
+    background-color: #ECECEC;
+}
+
+.popular-products .container .products .product .img{
+    width: 100%;
+    text-align: center;
+}
+.popular-products .container .products .product .infos{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    color: red;
+}
+.popular-products .container .products .product .infos h2{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.explore-button-container {
+    margin-top: 50px; /* Space above the button */
+    text-align: center; /* Center the button */
+}
+
+.explore-all-items-btn {
+    display: inline-block;
+    background-color: #ff0000; /* Red background */
+    color: #fff; /* White text */
+    padding: 12px 30px; /* Adjust padding */
+    text-decoration: none;
+    border-radius: 8px; /* Slightly rounded corners */
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    /* Add space between text and arrow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between text and arrow */
+    width: fit-content;
+    margin: auto;
+}
+
+.explore-all-items-btn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}

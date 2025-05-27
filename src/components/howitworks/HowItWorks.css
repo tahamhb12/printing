@@ -1,0 +1,67 @@
+.how-it-works-section {
+    background-color: #fff; /* White background */
+    text-align: center;
+    margin-top: 101px;
+    margin-bottom: 101px;
+
+}
+
+.how-it-works-section h2 {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 50px;
+    color: #000;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.step-item {
+    background-color: #f8f8f8; /* Light grey background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px auto;
+    background-color: #eee; /* Placeholder background */
+    border-radius: 50%; /* Circular icon background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-icon svg, .step-icon img {
+    width: 40px;
+    height: 40px;
+    color: #ff0000; /* Red color for icons */
+}
+
+.step-item h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.step-item p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .how-it-works-section h2 {
+        font-size: 2em;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+} 

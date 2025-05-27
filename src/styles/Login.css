@@ -1,0 +1,133 @@
+.login-page-container {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.login-page-box {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-page-box h1 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.login-page-subtitle {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.login-page-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-page-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-page-form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.login-page-form-group input {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+}
+
+.login-page-form-group input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.login-page-form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.login-page-remember-me {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-page-remember-me input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+}
+
+.login-page-forgot-password {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.login-page-forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-page-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-page-button:hover {
+  background-color: #1d4ed8;
+}
+
+.login-page-signup-link {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.login-page-signup-link a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-page-signup-link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .login-page-box {
+    padding: 1.5rem;
+  }
+  
+  .login-page-box h1 {
+    font-size: 1.5rem;
+  }
+} 

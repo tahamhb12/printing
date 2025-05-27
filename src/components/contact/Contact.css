@@ -1,0 +1,143 @@
+.contact-section {
+    padding: 80px 0;
+    background-color: #fff; /* White background */
+    margin-bottom: 101px;
+}
+
+.contact-section h2 {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 50px;
+    color: #000;
+}
+
+.contact-content {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contact-info,
+.contact-form {
+    flex: 1; /* Allow both sections to grow */
+    min-width: 300px; /* Minimum width for responsiveness */
+}
+
+.contact-info p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.contact-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-info li {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.contact-info li strong {
+    color: #000;
+}
+
+.contact-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.contact-form textarea {
+    min-height: 150px;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.submit-btn {
+    background-color: #ff0000; /* Red background */
+    color: #fff; /* White text */
+    padding: 15px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto; /* Auto width based on content */
+    align-self: flex-start; /* Align button to the start */
+}
+
+.submit-btn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+@media (max-width: 768px) {
+    .contact-section h2 {
+        font-size: 2em; /* Adjust heading size */
+        margin-bottom: 30px;
+    }
+
+    .contact-content {
+        flex-direction: column; /* Stack contact info and form vertically */
+        gap: 30px; /* Adjust gap when stacked */
+    }
+
+    .contact-info,
+    .contact-form {
+        min-width: unset; /* Remove min-width on smaller screens */
+        width: 100%; /* Allow sections to take full width */
+    }
+
+    .contact-form form {
+        gap: 15px; /* Reduce gap in form */
+    }
+}
+
+@media (max-width: 576px) {
+    .contact-section {
+        padding: 40px 0; /* Reduce section padding */
+    }
+
+    .contact-section h2 {
+        font-size: 1.8em; /* Further reduce heading size */
+        margin-bottom: 20px;
+    }
+
+    .contact-content {
+        gap: 30px; /* Reduce gap between info and form */
+    }
+
+    .contact-info p,
+    .contact-info li {
+        font-size: 0.9em; /* Reduce info font size */
+    }
+
+    .contact-form input,
+    .contact-form textarea,
+    .submit-btn {
+        font-size: 0.9em; /* Reduce form element font size */
+        padding: 12px; /* Adjust padding */
+    }
+
+    .contact-form textarea {
+        min-height: 120px; /* Adjust textarea height */
+    }
+
+    .submit-btn {
+        padding: 12px 20px; /* Adjust button padding */
+    }
+} 

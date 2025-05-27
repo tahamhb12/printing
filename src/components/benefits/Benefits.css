@@ -1,0 +1,71 @@
+.benefits-section {
+    padding: 80px 0;
+    background-color: #fffbf8; /* Off-white background */
+    text-align: center;
+    margin-top: 101px;
+
+}
+
+.benefits-section h2 {
+    font-size: 2.5em; /* Adjust font size */
+    font-weight: bold;
+    margin-bottom: 50px;
+    color: #000;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 40px; /* Space between benefit items */
+    margin-top: 30px;
+}
+
+.benefit-item {
+    text-align: center;
+}
+
+.benefit-icon {
+    width: 60px; /* Adjust size of icon container */
+    height: 60px;
+    margin: 0 auto 20px auto; /* Center icon and add space below */
+    background-color: #f0f0f0; /* Placeholder background for icons */
+    border-radius: 10px; /* Rounded corners for icon background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Add specific background colors for each icon if needed */
+    /* For example: */
+    /* &:nth-child(1) { background-color: #e6e6fa; } */ /* Light lavender */
+    /* &:nth-child(2) { background-color: #fff0e6; } */ /* Light peach */
+    /* &:nth-child(3) { background-color: #e0f2f7; } */ /* Light cyan */
+}
+
+.benefit-icon svg, .benefit-icon img {
+    width: 40px; /* Size of the actual icon */
+    height: 40px;
+    color: #ff0000; /* Red color for icons, adjust as needed */
+}
+
+.benefit-item h3 {
+    font-size: 1.5em; /* Adjust font size */
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.benefit-item p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .benefits-section h2 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr; /* Stack items vertically on smaller screens */
+    }
+} 

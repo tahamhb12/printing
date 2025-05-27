@@ -1,0 +1,92 @@
+.hero {
+    background-color: #d3d3d3; /* Light grey background */
+    padding: 80px 0;
+    display: flex;
+    align-items: center;
+    min-height: 500px; /* Adjust height as needed */
+}
+
+.hero .container {
+    display: flex; /* Enable flexbox for the container */
+    align-items: center;
+    justify-content: space-between; /* Distribute space between content and image */
+    gap: 40px; /* Add some space between the content and image */
+}
+
+.hero-content {
+    flex: 1; /* Allow the content to take up available space */
+}
+
+.hero-image {
+    flex: 1; /* Allow the image container to take up available space */
+}
+
+.hero-image img {
+    display: block; /* Remove extra space below the image */
+    max-width: 100%; /* Ensure the image is responsive */
+    height: auto;
+}
+
+.hero h1 {
+    font-size: 3em; /* Adjust font size */
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000; /* Black text color */
+    line-height: 1.2; /* Adjust line height */
+}
+
+.hero p {
+    font-size: 1.2em; /* Adjust font size */
+    margin-bottom: 30px;
+    color: #333; /* Dark grey text color */
+}
+
+.shop-now-btn {
+    display: inline-block;
+    background-color: #ff0000; /* Red background */
+    color: #fff; /* White text */
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    border: none; /* Remove default button border */
+    cursor: pointer;
+}
+
+.shop-now-btn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+@media (max-width: 1024px) {
+    .hero h1 {
+        font-size: 2.5em; /* Reduce font size on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .hero .container {
+        flex-direction: column; /* Stack content and image vertically on smaller screens */
+        text-align: center; /* Center-align text on smaller screens */
+    }
+
+    .hero-content,
+    .hero-image {
+        flex: none; /* Remove flex growth on smaller screens */
+        width: 100%; /* Allow content and image to take full width */
+    }
+
+    .hero-image {
+        margin-top: 40px; /* Add space between text and image on smaller screens */
+    }
+
+    .hero h1 {
+        font-size: 2em; /* Further reduce font size on tablet screens */
+    }
+}
+
+@media (max-width: 475px) {
+    .hero h1 {
+        font-size: 1.8em; /* Reduce font size on small mobile screens */
+    }
+} 
