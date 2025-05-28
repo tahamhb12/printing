@@ -10,13 +10,9 @@ export const AuthContextProvider = ({children}) =>{
     const navigate = useNavigate()
     const [products, setproducts] = useState([]);
     const categories = [
-      'Flyers & Posters',
-      'Business Cards',
-      'Brochures ',
-      'Packaging',
-      'Living Room',
-      'Kitchen',
-      'Living Space',
+      'publicité industrielle',
+      'papeterie',
+      'gadget ',
     ];
 
     

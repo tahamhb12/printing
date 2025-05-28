@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import './Categories.css';
 import { UserAuth } from '../../AuthContext/AuthContext';
+import { Link } from 'react-router-dom';
+import img1 from './gadget.png';
+import img2 from './pub.png';
+import img3 from './pap.png';
 
 const Categories = () => {
   const sectionRef = useRef(null);
@@ -27,45 +31,30 @@ const Categories = () => {
     // Clean up the observer on component unmount
     return () => {
       if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+        observer.unobserve(observer);
       }
     };
   }, []); // Empty dependency array means this effect runs once on mount
 
-
+  const categoryImages = [img1, img2, img3];
   return (
     <section ref={sectionRef} className="categories-section fade-in-section">
       <div className="container">
         <h2>Explore by Category</h2>
         <div className="categories-content">
-          <div className="category-filter">
-            <div className="search-input">
-              <input type="text" placeholder="Search" />
-              {/* Add search icon here */}
-            </div>
-            <ul className="category-list">
-              {categories.map((category, index) => (
-                <li key={index} className="category-item">
-                  {category}
-                </li>
-              ))}
-            </ul>
-            <button className="all-categories-btn">All Categories &rarr;</button>
-          </div>
           <div className="category-grid">
-            {/* Placeholder category cards */}
-            <div className="category-card">
-                <div className="card-image">{/* Category Image */}</div>
+            {categories.slice(0, 3).map((category, index) => (
+              <Link 
+                to={`/categories/${category}`}
+                key={index} 
+                className="category-card"
+              >
+                <div className="card-image"><img src={categoryImages[index]} alt="" /></div>
                 <div className="card-info">
-                    <h3>Bedroom</h3>
-                    <p>Explore</p>
+                  <h3>{category}</h3>
                 </div>
-            </div>
-            <div className="category-card"></div>
-            <div className="category-card"></div>
-            <div className="category-card"></div>
-            <div className="category-card"></div>
-            <div className="category-card"></div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

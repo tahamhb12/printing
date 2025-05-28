@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Creations.css';
 
 const Creations = () => {
   const sectionRef = useRef(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,6 +31,14 @@ const Creations = () => {
     };
   }, []); // Empty dependency array means this effect runs once on mount
 
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
+
   return (
     <section ref={sectionRef} className="creations-section fade-in-section">
       <div className="container">
@@ -44,14 +53,16 @@ const Creations = () => {
             </div>
           </div>
           <div className="creations-grid">
-            {/* Placeholder creation cards */}
-            <div className="creation-card">
-                <button className="explore-button">Explore All Rooms</button>
-            </div>
-            <div className="creation-card"></div>
-            <div className="creation-card"></div>
-            <div className="creation-card"></div>
-            <div className="creation-card"></div>
+            {[1, 2, 3, 4].map((index) => (
+              <div 
+                key={index}
+                className={`creation-card ${hoveredIndex !== null && hoveredIndex !== index ? 'blurred' : ''}`}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+
+              </div>
+            ))}
           </div>
         </div>
       </div>

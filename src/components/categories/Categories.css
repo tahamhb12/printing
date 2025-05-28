@@ -1,181 +1,165 @@
 .categories-section {
     margin-top: 101px;
+    padding: 40px 0;
+}
 
+.categories-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .categories-section h2 {
-    font-size: 2.5em; /* Adjust font size */
+    font-size: 2.5em;
     font-weight: bold;
     text-align: center;
     margin-bottom: 50px;
     color: #000;
+    position: relative;
+}
+
+.categories-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #ff0000;
+    border-radius: 2px;
 }
 
 .categories-content {
-    display: flex; /* Enable flexbox for the content area */
-    gap: 40px; /* Space between filter and grid */
-}
-
-.category-filter {
-    width: 250px; /* Fixed width for the filter area */
-    flex-shrink: 0; /* Prevent shrinking */
-}
-
-.search-input {
     display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+
+.category-grid {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    justify-items: center;
+    padding-bottom: 40px;
+}
+
+.category-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    max-width: 320px;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.category-card .card-image {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 30px;
-    background-color: #fff;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-.search-input input {
-    border: none;
-    outline: none;
-    flex-grow: 1; /* Allow input to take available space */
-    padding-left: 10px; /* Add some padding after search icon */
+.category-card .card-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
 }
 
-.category-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.category-card:hover .card-image img {
+    transform: scale(1.08);
+}
+
+.category-card .card-info {
+    padding: 20px;
+    text-align: center;
+    background-color: #ffffff;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.category-item {
-    padding: 15px;
-    cursor: pointer;
-    text-align: left;
-    color: #555;
-    transition: background-color 0.3s ease;
-}
-
-.category-item:last-child {
-    border-bottom: none;
-}
-
-.category-item:hover {
-    background-color: #f0f0f0;
-}
-
-.category-item.active {
-    background-color: #ff0000; /* Red background for active item */
-    color: #fff; /* White text for active item */
-}
-
-.all-categories-btn {
-    display: block; /* Make button a block element */
-    width: 100%;
-    background-color: #ff0000; /* Red background */
-    color: #fff; /* White text */
-    padding: 12px 25px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1.1em;
-    transition: background-color 0.3s ease;
-    border: none;
-    cursor: pointer;
-    margin-top: 30px; /* Space above the button */
-}
-
-.all-categories-btn:hover {
-    background-color: #cc0000; /* Darker red on hover */
-}
-
-.category-grid {
-    flex-grow: 1; /* Allow grid to take available space */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-    gap: 20px; /* Space between category cards */
-}
-
-.category-card {
-    background-color: #ccc; /* Placeholder background for cards */
-    border-radius: 10px;
-    overflow: hidden; /* Hide anything outside the border radius */
-    position: relative; /* Needed for absolute positioning of info */
-    min-height: 200px; /* Minimum height for cards */
-    display: flex; /* Use flex to center content */
-    justify-content: center;
-    align-items: center;
-    color: #fff; /* White text for placeholder */
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.category-card .card-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    /* Add placeholder background image or remove if using img tag */
-    /* background-image: url('placeholder-image.jpg'); */
-}
-
-.category-card .card-info {
-    position: relative; /* Ensure info is above the image */
-    z-index: 1;
-    text-align: center;
-}
-
 .category-card .card-info h3 {
-    color: #fff;
-    margin-bottom: 5px;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    position: relative;
 }
 
 .category-card .card-info p {
-    color: #eee;
-    font-size: 0.9em;
+    display: none;
 }
 
-/* Specific style for the first card as it appears highlighted */
-.category-grid .category-card:first-child {
-    background-color: #a9a9a9; /* Darker grey for the first card */
-}
-@media (min-width:992px) and (max-width:1024px) {
-    .category-grid{
-        overflow-x: scroll;
-        height: 600px;
+/* Responsive adjustments for grid */
+@media (max-width: 1200px) {
+    .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
     }
 }
-@media (max-width: 992px) {
-    .categories-content {
-        flex-direction: column; /* Stack filter and grid vertically on smaller screens */
+
+@media (max-width: 768px) {
+     .categories-content {
+        flex-direction: column;
         gap: 30px;
     }
 
-    .category-filter {
-        width: 100%; /* Allow filter to take full width */
-    }
-
-    .category-list {
-        display: flex; /* Display list items horizontally */
-        flex-wrap: wrap; /* Allow items to wrap */
-        border: none; /* Remove border */
-        background-color: transparent; /* Remove background */
-        gap: 10px; /* Space between horizontal items */
-        flex-direction: row;
-    }
-
-
-    .search-input {
-        margin-bottom: 10px; /* Adjust margin below search input */
-    }
-
-    .all-categories-btn {
-        margin-top: 10px; /* Adjust margin above button */
-    }
-
     .category-grid {
-         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust grid for smaller screens */
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 20px;
+    }
+
+    .category-card .card-image {
+        height: 140px;
+    }
+
+    .category-card .card-info {
+        padding: 15px;
+    }
+
+    .category-card .card-info h3 {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-grid {
+         grid-template-columns: 1fr;
+         gap: 15px;
+         padding-bottom: 30px;
+    }
+
+    .category-card {
+        max-width: none;
+    }
+
+    .category-card .card-image {
+        height: 100px;
+    }
+
+    .category-card .card-info h3 {
+        font-size: 1em;
     }
 } 
