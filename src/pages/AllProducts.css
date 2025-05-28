@@ -261,7 +261,7 @@
     }
 
     .products {
-        grid-template-columns: 1fr;
+        /* grid-template-columns: 1fr; */
         gap: 15px;
     }
 

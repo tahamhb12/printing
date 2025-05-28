@@ -76,7 +76,7 @@ const ProductDetails = () => {
 
   return (
     <div className="product-details-container">
-      <div className="product-gallery">
+{/*       <div className="product-gallery">
         <div className="main-image">
           <img src={product.images[selectedImage]} alt={product.name} />
         </div>
@@ -182,7 +182,8 @@ const ProductDetails = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
+      <h2>later</h2>
     </div>
   );
 };
