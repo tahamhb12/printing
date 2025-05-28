@@ -1,49 +1,49 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import './Hero.css';
-import heroImage from './heroimage.png';
+import { Link } from 'react-router-dom';
+import image from './heroimage.png'
 
 const Hero = () => {
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            // Optionally, unobserve once visible if it only needs to animate once
-            // observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 } // Trigger when 10% of the element is visible
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    // Clean up the observer on component unmount
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []); // Empty dependency array means this effect runs once on mount
-
   return (
-    <section ref={sectionRef} className="hero fade-in-section">
-      <div className="container">
-        <div className="hero-content">
-          <h1>Exclusive Deals of<br/>Furniture Collection</h1>
-          <p>Explore different categories. Find the best deals.</p>
-          <button className="shop-now-btn">Shop Now</button>
+    <div className="hero">
+      <div className="hero-content">
+        <div className="hero-text">
+          <h1>Professional Printing Services</h1>
+          <p>Transform your ideas into reality with our high-quality printing solutions. Fast, reliable, and perfect every time.</p>
+          <div className="hero-buttons">
+            <Link to="/products" className="primary-btn">
+              <i className="fas fa-print"></i>
+              <span>View Products</span>
+            </Link>
+            <Link to="/contact" className="secondary-btn">
+              <i className="fas fa-envelope"></i>
+              <span>Get in Touch</span>
+            </Link>
+          </div>
         </div>
         <div className="hero-image">
-          <img src={heroImage} alt="Furniture Collection" /> {/* Replace with your image path */}
+          <img src={image} alt="Printing Services" />
+          <div className="image-overlay"></div>
         </div>
       </div>
-    </section>
+      <div className="hero-features">
+        <div className="feature">
+          <i className="fas fa-truck"></i>
+          <h3>Fast Delivery</h3>
+          <p>Quick turnaround time</p>
+        </div>
+        <div className="feature">
+          <i className="fas fa-medal"></i>
+          <h3>Premium Quality</h3>
+          <p>Best materials used</p>
+        </div>
+        <div className="feature">
+          <i className="fas fa-headset"></i>
+          <h3>24/7 Support</h3>
+          <p>Always here to help</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

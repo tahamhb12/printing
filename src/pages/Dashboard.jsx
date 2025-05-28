@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../styles/Dashboard.css';
 import supabase from '../helpler/supabaseClient';
 import { UserAuth } from '../AuthContext/AuthContext';
+import { Link } from 'react-router-dom';
 
 // Move EditModal outside of Dashboard component
 const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpdateProduct, categories, handleEditPhotoChange, editPreviewUrl }) => {
@@ -107,6 +108,7 @@ const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpda
 };
 
 const Dashboard = () => {
+  const { products, currentPage, totalPages, handlePageChange, categories, setproducts } = UserAuth();
   const [activeTab, setActiveTab] = useState('add'); // 'add' or 'edit'
   const [productData, setProductData] = useState({
     name: '',
@@ -134,8 +136,30 @@ const Dashboard = () => {
   const [uploading, setUploading] = useState(false);
 
 
-  const {products,setproducts,categories} = UserAuth()
+  const sectionRef = useRef(null);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -277,7 +301,6 @@ const Dashboard = () => {
         console.log(error);
         alert('Error adding product');
       } else {
-        setproducts((prev) => [...prev, data]);
         // Reset form
         setProductData({
           name: '',
@@ -355,20 +378,40 @@ const Dashboard = () => {
       const { data, error } = await supabase
         .from("products")
         .update(updateData)
-        .eq("id", selectedProduct.id);
+        .eq("id", selectedProduct.id)
+        .select()
+        .single();
 
       if (error) {
-        console.log(error);
+        console.log(error.message);
         alert('Error updating product');
       } else {
-        const updatedProductsList = products.map((pro) =>
-          pro.id === selectedProduct.id ? { ...pro, ...updateData } : pro
-        );
-        setproducts(updatedProductsList);
-        alert("Updated product");
+        // Fetch the updated products list with pagination
+        const { data: updatedProducts, error: fetchError } = await supabase
+          .from('products')
+          .select('*')
+          .range((currentPage - 1) * 8, currentPage * 8 - 1)
+          .order('created_at', { ascending: false });
+
+        if (fetchError) {
+          console.error('Error fetching updated products:', fetchError);
+        } else {
+          // Update the products in context
+          setproducts(updatedProducts);
+        }
+
+        // Reset form
+        setEditFormData({
+          name: '',
+          description: '',
+          price: '',
+          category: '',
+          image_url: ''
+        });
         setShowEditModal(false);
         setEditSelectedFile(null);
         setEditPreviewUrl(null);
+        alert("Product updated successfully");
       }
     } catch (error) {
       console.error('Error updating product:', error);
@@ -398,13 +441,64 @@ const Dashboard = () => {
           await deleteImage(productToDelete.image_url);
         }
 
-        setproducts((prev) => prev.filter((product) => product.id !== productId));
-        alert("Product Deleted");
+        // Fetch the updated products list with pagination
+        const { data: updatedProducts, error: fetchError } = await supabase
+          .from('products')
+          .select('*')
+          .range((currentPage - 1) * 8, currentPage * 8 - 1)
+          .order('created_at', { ascending: false });
+
+        if (fetchError) {
+          console.error('Error fetching updated products:', fetchError);
+        } else {
+          // Update the products in context
+          setproducts(updatedProducts);
+        }
+
+        // Reset form
+        setEditFormData({
+          name: '',
+          description: '',
+          price: '',
+          category: '',
+          image_url: ''
+        });
+        setShowEditModal(false);
+        setEditSelectedFile(null);
+        setEditPreviewUrl(null);
+        alert("Product deleted successfully");
       }
     } catch (error) {
       console.error('Error deleting product:', error);
       alert('Error deleting product');
     }
+  };
+
+  // Generate page numbers
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`page-number ${currentPage === i ? 'active' : ''}`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return pageNumbers;
   };
 
   const renderAddProduct = () => (
@@ -559,11 +653,34 @@ const Dashboard = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            className="page-nav"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &laquo; Previous
+          </button>
+          
+          {renderPageNumbers()}
+          
+          <button
+            className="page-nav"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next &raquo;
+          </button>
+        </div>
+      )}
     </div>
   );
 
   return (
-    <div className="dashboard-container">
+    <div ref={sectionRef} className="dashboard-container">
       <div className="dashboard-header">
         <h1>Product Dashboard</h1>
         <p className="dashboard-subtitle">Manage your products</p>

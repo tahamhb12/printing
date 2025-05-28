@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Navbar from './components/navbar/navbar'
+import TopBar from './components/topbar/TopBar'
 import Hero from './components/hero/Hero'
 import Statistics from './components/statistics/Statistics'
 import PopularProducts from './components/popularProducts/PopularProducs'
@@ -11,11 +12,12 @@ import Footer from './components/footer/Footer'
 import Testimonials from './components/testimonials/Testimonials'
 import Contact from './components/contact/Contact'
 import HowItWorks from './components/howitworks/HowItWorks'
-import CategoryProductPage from './pages/CategoryProductPage'
+import AllProducts from './pages/AllProducts'
 import ContactPage from './pages/ContactPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
+import ProductDetails from './pages/ProductDetails'
 import { AuthContextProvider, UserAuth } from './AuthContext/AuthContext'
 
 // Protected Route Component
@@ -42,6 +44,7 @@ function App() {
     <Router>
       <AuthContextProvider>
         <div className="app">
+          <TopBar />
           <Navbar />
           <main>
             <Routes>
@@ -57,7 +60,8 @@ function App() {
                   <HowItWorks />
                 </>
               } />
-              <Route path="/categories-products" element={<CategoryProductPage />} />
+              <Route path="/products" element={<AllProducts />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={
                 <PublicRoute>

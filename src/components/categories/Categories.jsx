@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import './Categories.css';
 import { UserAuth } from '../../AuthContext/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import img1 from './gadget.png';
 import img2 from './pub.png';
 import img3 from './pap.png';
 
 const Categories = () => {
   const sectionRef = useRef(null);
-  const {categories} = UserAuth()
+  const {categories} = UserAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,10 +32,14 @@ const Categories = () => {
     // Clean up the observer on component unmount
     return () => {
       if (sectionRef.current) {
-        observer.unobserve(observer);
+        observer.unobserve(sectionRef.current);
       }
     };
   }, []); // Empty dependency array means this effect runs once on mount
+
+  const handleCategoryClick = (category) => {
+    navigate('/products', { state: { selectedCategory: category } });
+  };
 
   const categoryImages = [img1, img2, img3];
   return (
@@ -44,16 +49,16 @@ const Categories = () => {
         <div className="categories-content">
           <div className="category-grid">
             {categories.slice(0, 3).map((category, index) => (
-              <Link 
-                to={`/categories/${category}`}
+              <div 
                 key={index} 
                 className="category-card"
+                onClick={() => handleCategoryClick(category)}
               >
                 <div className="card-image"><img src={categoryImages[index]} alt="" /></div>
                 <div className="card-info">
                   <h3>{category}</h3>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

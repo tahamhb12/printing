@@ -6,6 +6,7 @@ nav {
     top: 0;
     width: 100%;
     z-index: 1000;
+    padding-top: 50px;
 }
 
 nav .container {
@@ -102,7 +103,7 @@ nav .container .links .auth-button:hover {
 
     nav .container .links {
         position: fixed;
-        top: 70px;
+        top: 53px;
         left: -100%;
         width: 100%;
         height: calc(100vh - 70px);
@@ -116,5 +117,6 @@ nav .container .links .auth-button:hover {
 
     nav .container .links.active {
         left: 0;
+        height: 100%;
     }
 }

@@ -1,92 +1,190 @@
 .hero {
-    background-color: #d3d3d3; /* Light grey background */
-    padding: 80px 0;
-    display: flex;
-    align-items: center;
-    min-height: 500px; /* Adjust height as needed */
-}
-
-.hero .container {
-    display: flex; /* Enable flexbox for the container */
-    align-items: center;
-    justify-content: space-between; /* Distribute space between content and image */
-    gap: 40px; /* Add some space between the content and image */
+    min-height: 100vh;
+    background: #ffffff;
+    padding: 6rem 0;
+    position: relative;
 }
 
 .hero-content {
-    flex: 1; /* Allow the content to take up available space */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-text {
+    max-width: 600px;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #2d3436;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    color: #636e72;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.primary-btn, .secondary-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background: #2196F3;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background: #f8f9fa;
+    color: #2196F3;
+    border: 1px solid #2196F3;
+}
+
+.secondary-btn:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
 }
 
 .hero-image {
-    flex: 1; /* Allow the image container to take up available space */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .hero-image img {
-    display: block; /* Remove extra space below the image */
-    max-width: 100%; /* Ensure the image is responsive */
+    width: 100%;
     height: auto;
+    display: block;
+    transition: transform 0.5s ease;
 }
 
-.hero h1 {
-    font-size: 3em; /* Adjust font size */
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #000; /* Black text color */
-    line-height: 1.2; /* Adjust line height */
+.hero-image:hover img {
+    transform: scale(1.05);
 }
 
-.hero p {
-    font-size: 1.2em; /* Adjust font size */
-    margin-bottom: 30px;
-    color: #333; /* Dark grey text color */
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(33, 150, 243, 0.2) 0%,
+        rgba(25, 118, 210, 0.1) 50%,
+        rgba(0, 0, 0, 0.05) 100%
+    );
+    pointer-events: none;
 }
 
-.shop-now-btn {
-    display: inline-block;
-    background-color: #ff0000; /* Red background */
-    color: #fff; /* White text */
-    padding: 12px 25px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1.1em;
-    transition: background-color 0.3s ease;
-    border: none; /* Remove default button border */
-    cursor: pointer;
+.hero-features {
+    max-width: 1200px;
+    margin: 4rem auto 0;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
 }
 
-.shop-now-btn:hover {
-    background-color: #cc0000; /* Darker red on hover */
+.feature {
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
 }
 
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.feature i {
+    font-size: 2rem;
+    color: #2196F3;
+    margin-bottom: 1rem;
+}
+
+.feature h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d3436;
+    margin-bottom: 0.5rem;
+}
+
+.feature p {
+    font-size: 0.9rem;
+    color: #636e72;
+    margin: 0;
+}
+
+/* Responsive Design */
 @media (max-width: 1024px) {
-    .hero h1 {
-        font-size: 2.5em; /* Reduce font size on medium screens */
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .hero-text {
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-image {
+        max-width: 600px;
+        margin: 0 auto;
     }
 }
 
 @media (max-width: 768px) {
-    .hero .container {
-        flex-direction: column; /* Stack content and image vertically on smaller screens */
-        text-align: center; /* Center-align text on smaller screens */
+    .hero {
+        padding: 4rem 0;
     }
 
-    .hero-content,
-    .hero-image {
-        flex: none; /* Remove flex growth on smaller screens */
-        width: 100%; /* Allow content and image to take full width */
+    .hero-text h1 {
+        font-size: 2.5rem;
     }
 
-    .hero-image {
-        margin-top: 40px; /* Add space between text and image on smaller screens */
+    .hero-buttons {
+        flex-direction: column;
     }
 
-    .hero h1 {
-        font-size: 2em; /* Further reduce font size on tablet screens */
+    .hero-features {
+        grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 475px) {
-    .hero h1 {
-        font-size: 1.8em; /* Reduce font size on small mobile screens */
+    .feature {
+        padding: 1.5rem;
     }
 } 

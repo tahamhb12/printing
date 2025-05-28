@@ -39,26 +39,35 @@ const PopularProducts = () => {
         <div ref={sectionRef} className="popular-products fade-in-section">
             <div className="container">
                 <h1>Popular Products</h1>
-                <div className="products">
-                    {displayProducts.map((product, index) => (
-                        <div 
-                            key={index} 
-                            className="product"
-                        >
-                            <div className="img">
-                                <img src={product.image_url} alt={product.name} />
-                            </div>
-                            <div className="infos">
-                                <h2>{product.name}</h2>
-                                <p>{product.description}</p>
-                                {/* <h2>${product.price}</h2> */}
-                            </div>
+                {displayProducts && displayProducts.length > 0 ? (
+                    <>
+                        <div className="products">
+                            {displayProducts.map((product, index) => (
+                                <div 
+                                    key={index} 
+                                    className="product"
+                                >
+                                    <div className="img">
+                                        <img src={product.image_url} alt={product.name} />
+                                    </div>
+                                    <div className="infos">
+                                        <h2>{product.name}</h2>
+                                        <p>{product.description}</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-                <div className="explore-button-container">
-                    <Link to="/categories-products" className="explore-all-items-btn">Explore all items &rarr;</Link>
-                </div>
+                        <div className="explore-button-container">
+                            <Link to="/products" className="explore-all-items-btn">Explore all items &rarr;</Link>
+                        </div>
+                    </>
+                ) : (
+                    <div className="no-products">
+                        <i className="fas fa-box-open"></i>
+                        <h3>No Products Found</h3>
+                        <p>There are no popular products available at the moment.</p>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -6,7 +6,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-.container {
+.container,.products,.category-grid,.hero {
   max-width: 1200px ;
   padding-left: 0.5rem ;
   padding-right: 0.5rem ;
@@ -16,48 +16,48 @@
 
 /* 2xl */
 @media (max-width: 1536px) {
-    .container {
+    .container,.products,.category-grid,.hero {
     max-width: 1280px;
   }
 }
 
 /* xl */
 @media (max-width: 1280px) {
-  .container {
+  .container,.products,.category-grid,.hero {
     max-width: 1024px;
   }
 }
 
 /* lg */
 @media (max-width: 1024px) {
-  .container {
+  .container,.products,.category-grid,.hero {
     max-width: 768px;
   }
 }
 
 /* md */
 @media (max-width: 768px) {
-  .container {
+  .container,.products,.category-grid,.hero {
     max-width: 640px;
   }
 }
 
 /* sm */
 @media (max-width: 640px) {
-  .container {
+  .container,.products,.category-grid,.hero {
     max-width: 475px;
   }
 }
 
 /* xs */
 @media (max-width: 475px) {
-  .container {
+  .container,.products,.category-grid,.hero {
     width: 100%;
   }
 }
 
 body {
-  padding-top: 70px; /* Add padding to the top of the body to accommodate the fixed navbar */
+  padding-top: 100px; /* Add padding to the top of the body to accommodate the fixed navbar */
 }
 
 /* Animation for fading in sections */

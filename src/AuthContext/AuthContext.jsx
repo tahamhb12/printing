@@ -9,6 +9,9 @@ export const AuthContextProvider = ({children}) =>{
     const [session,setSession] = useState()
     const navigate = useNavigate()
     const [products, setproducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const productsPerPage = 8;
     const categories = [
       'publicité industrielle',
       'papeterie',
@@ -77,25 +80,67 @@ export const AuthContextProvider = ({children}) =>{
         })
       },[])
 
-    //fetch products
-    useEffect(() => {
-      fetchProducts();
-    }, []);
-    //fetch products
-    const fetchProducts = async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('id,name,price,description,category,image_url');
-      if (error) {
-        console.log(error);
-      } else {
+    //fetch products with pagination
+    const fetchProducts = async (page = 1) => {
+      try {
+        // First, get total count
+        const { count, error: countError } = await supabase
+          .from('products')
+          .select('*', { count: 'exact', head: true });
+
+        if (countError) {
+          console.error('Error getting count:', countError);
+          return;
+        }
+
+        // Calculate total pages
+        const total = Math.ceil(count / productsPerPage);
+        setTotalPages(total);
+
+        // Fetch paginated products
+        const { data, error } = await supabase
+          .from('products')
+          .select('id,name,price,description,category,image_url')
+          .range((page - 1) * productsPerPage, page * productsPerPage - 1)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching products:', error);
+          return;
+        }
+
         setproducts(data);
+        setCurrentPage(page);
+      } catch (err) {
+        console.error('Unexpected error:', err);
       }
     };
 
 
+    // Handle page change
+    const handlePageChange = (newPage) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        fetchProducts(newPage);
+      }
+    };
+
+    useEffect(() => {
+      fetchProducts(1);
+    }, []);
+
     return (
-        <AuthContext.Provider value={{session,signOut,signUp,signIn,products,setproducts,categories}}>
+        <AuthContext.Provider value={{
+          session,
+          signOut,
+          signUp,
+          signIn,
+          products,
+          setproducts,
+          categories,
+          currentPage,
+          totalPages,
+          handlePageChange
+        }}>
             {children}
         </AuthContext.Provider>
     )

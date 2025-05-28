@@ -24,12 +24,12 @@ const Navbar = () => {
     return ( 
         <nav>
             <div className="container">
-                <div className="logo">
+                <div onClick={()=>navigate('/')} className="logo">
                     <img src={logo} alt="logo" />
                 </div>
                 <div className={`links ${isMenuOpen ? 'active' : ''}`}>
                     <Link to="/" onClick={closeMenu}>Home</Link>
-                    <Link to="/categories-products" onClick={closeMenu}>Categories</Link>
+                    <Link to="/products" onClick={closeMenu}>Products</Link>
                     <Link to="/contact" onClick={closeMenu}>Contact Us</Link>
                     {!session?.user && <Link to="/login" onClick={closeMenu}>Login</Link>}
                     {/* {!session?.user && <Link to="/register" onClick={closeMenu}>Sign Up</Link>} */}

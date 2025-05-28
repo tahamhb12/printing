@@ -83,6 +83,9 @@
     gap: 20px; /* Space between creation cards */
     padding-bottom: 20px; /* Add some padding for the scrollbar */
     margin-top: 29px;
+    scrollbar-width: thin;
+    scrollbar-color: #dc3545 white;
+    scroll-behavior: smooth;
 }
 
 .creation-card {
