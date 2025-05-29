@@ -17,6 +17,7 @@ nav .container {
 
 nav .container .logo  {
     padding-top: 7px;
+    cursor: pointer;
 }
 nav .container .logo img {
     height: 49px;

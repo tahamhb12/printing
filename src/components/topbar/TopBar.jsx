@@ -51,7 +51,7 @@ const TopBar = () => {
             <a href="#" className="social-link">
               <i className="fab fa-instagram"></i>
             </a>
-            <a href="#" className="social-link">
+            <a href="https://wa.me/+212661945584" className="social-link" target="_blank" rel="noopener noreferrer">
               <i className="fa-brands fa-whatsapp"></i>
             </a>
           </div>

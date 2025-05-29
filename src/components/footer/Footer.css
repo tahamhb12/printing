@@ -12,6 +12,7 @@
 }
 
 .footer-logo img {
+    cursor: pointer;
     height: 149px; /* Adjust logo size */
 }
 

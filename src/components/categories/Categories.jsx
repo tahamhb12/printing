@@ -45,7 +45,7 @@ const Categories = () => {
     scrollToTop()
   };
 
-  const categoryImages = [img1, img2, img3];
+  const categoryImages = [img2, img3, img1];
   return (
     <section ref={sectionRef} className="categories-section fade-in-section">
       <div className="container">

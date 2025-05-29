@@ -189,7 +189,7 @@ const AllProducts = () => {
                     <h2>{product.name}</h2>
                     <p className="description">{product.description}</p>
                     <div className="product-meta">
-                      <span className="price">${product.price}</span>
+                      {/* <span className="price">${product.price}</span> */}
                       {product.rating && (
                         <div className="rating">
                           <i className="fas fa-star"></i>

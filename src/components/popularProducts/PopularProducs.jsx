@@ -2,13 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import './PopularProducts.css'
 import { Link } from 'react-router-dom';
 import { UserAuth } from '../../AuthContext/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const PopularProducts = () => {
     const sectionRef = useRef(null);
     const {products} = UserAuth();
     const [isVisible, setIsVisible] = useState(false);
     const domRef = useRef();
-
+    const navigate = useNavigate()
+    const scrollToTop = () => {
+        navigate('/products')
+        window.scrollTo(0, 0);
+      };
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -58,7 +63,7 @@ const PopularProducts = () => {
                             ))}
                         </div>
                         <div className="explore-button-container">
-                            <Link to="/products" className="explore-all-items-btn">Explore all items &rarr;</Link>
+                            <Link to={'/products'} onClick={scrollToTop} className="explore-all-items-btn">Explore all items &rarr;</Link>
                         </div>
                     </>
                 ) : (
