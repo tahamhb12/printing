@@ -43,7 +43,7 @@ const PopularProducts = () => {
     return ( 
         <div ref={sectionRef} className="popular-products fade-in-section">
             <div className="container">
-                <h1>Popular Products</h1>
+                <h1>Produits Populaires</h1>
                 {displayProducts && displayProducts.length > 0 ? (
                     <>
                         <div className="products">
@@ -63,14 +63,14 @@ const PopularProducts = () => {
                             ))}
                         </div>
                         <div className="explore-button-container">
-                            <Link to={'/products'} onClick={scrollToTop} className="explore-all-items-btn">Explore all items &rarr;</Link>
+                            <Link to={'/products'} onClick={scrollToTop} className="explore-all-items-btn">Explorer tous les articles &rarr;</Link>
                         </div>
                     </>
                 ) : (
                     <div className="no-products">
                         <i className="fas fa-box-open"></i>
-                        <h3>No Products Found</h3>
-                        <p>There are no popular products available at the moment.</p>
+                        <h3>Aucun Produit Trouvé</h3>
+                        <p>Aucun produit populaire n'est disponible pour le moment.</p>
                     </div>
                 )}
             </div>

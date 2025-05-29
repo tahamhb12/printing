@@ -19,17 +19,17 @@ const Footer = () => {
             <img src={logo} alt="logo" />
           </div>
           <div className="footer-links">
-            <h3>Quick Link</h3>
+            <h3>Liens Rapides</h3>
             <ul>
-              <li><Link to="/" onClick={scrollToTop}>Home</Link></li>
-              <li><Link to="#" onClick={scrollToTop}>About Us</Link></li>
-              <li><Link to="/products" onClick={scrollToTop}>Products</Link></li>
+              <li><Link to="/" onClick={scrollToTop}>Accueil</Link></li>
+              <li><Link to="#" onClick={scrollToTop}>À Propos</Link></li>
+              <li><Link to="/products" onClick={scrollToTop}>Produits</Link></li>
               <li><Link to="/contact" onClick={scrollToTop}>Contact</Link></li>
             </ul>
           </div>
           <div className="footer-description">
-            <h3>About Us</h3>
-            <p>We are a printing company dedicated to providing high-quality printing services for all your needs.</p>
+            <h3>À Propos</h3>
+            <p>Nous sommes une entreprise d'impression dédiée à fournir des services d'impression de haute qualité pour tous vos besoins.</p>
             {/* Add more contact info or social media links here if needed */}
           </div>
         </div>

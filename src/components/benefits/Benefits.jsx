@@ -33,7 +33,7 @@ const Benefits = () => {
   return (
     <section ref={sectionRef} className="benefits-section fade-in-section">
       <div className="container">
-        <h2>Benefits for your expediency</h2>
+        <h2>Avantages pour votre commodité</h2>
         <div className="benefits-grid">
           <div className="benefit-item">
             <div className="benefit-icon">
@@ -51,8 +51,8 @@ const Benefits = () => {
           </defs>
           </svg>
             </div>
-            <h3>Payment Method</h3>
-            <p>We offer flexible payment options, to make easier.</p>
+            <h3>Méthode de Paiement</h3>
+            <p>Nous offrons des options de paiement flexibles, pour vous faciliter la tâche.</p>
           </div>
           <div className="benefit-item">
             <div className="benefit-icon">
@@ -63,8 +63,8 @@ const Benefits = () => {
               <path d="M6.74682 63.0781C6.37086 63.0781 5.99749 62.918 5.73669 62.6076L5.73411 62.6045C5.26417 62.0457 5.33647 61.2122 5.89524 60.7423C6.45401 60.2718 7.28803 60.3441 7.75798 60.9029C8.22741 61.4622 8.15666 62.2972 7.59789 62.7672C7.34949 62.9758 7.04738 63.0781 6.74682 63.0781Z" fill="#D60101"/>
               </svg>
             </div>
-            <h3>Return policy</h3>
-            <p>You can return a product within 30 days.</p>
+            <h3>Politique de Retour</h3>
+            <p>Vous pouvez retourner un produit dans les 30 jours.</p>
           </div>
           <div className="benefit-item">
             <div className="benefit-icon">
@@ -73,8 +73,8 @@ const Benefits = () => {
               </svg>
 
             </div>
-            <h3>Customer Support</h3>
-            <p>Our customer support is 24/7.</p>
+            <h3>Support Client</h3>
+            <p>Notre support client est disponible 24/7.</p>
           </div>
         </div>
       </div>

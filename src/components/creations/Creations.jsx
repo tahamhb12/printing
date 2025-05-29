@@ -44,10 +44,10 @@ const Creations = () => {
       <div className="container">
         <div className="creations-content">
           <div className="featured-card">
-            <h2>Our Own<br/>Creation</h2>
-            <p className="subtitle">Designed in our<br/>studio</p>
+            <h2>Nos<br/>Collabs</h2>
+            <p className="subtitle">Conçu dans notre<br/>studio</p>
             <div className="more-link">
-              <span>More</span>
+              <span>Plus</span>
               <div className="progress-bar"></div>
               <button className="arrow-button">&rarr;</button> {/* Or an actual arrow icon */}
             </div>

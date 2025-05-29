@@ -94,9 +94,9 @@ const AllProducts = () => {
     <div ref={sectionRef} className="all-products fade-in-section">
       <div className="container">
         <div className="products-header">
-          <h2>All Products</h2>
+          <h2>Tous les Produits</h2>
           <div className="products-stats">
-            <span>{filteredProducts.length} products found</span>
+            <span>{filteredProducts.length} produits trouvés</span>
             {selectedCategory !== 'all' && (
               <span className="category-badge">{selectedCategory}</span>
             )}
@@ -108,7 +108,7 @@ const AllProducts = () => {
           <div className="search-bar">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Rechercher des produits..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -116,7 +116,7 @@ const AllProducts = () => {
               <button 
                 className="clear-search"
                 onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
+                aria-label="Effacer la recherche"
               >
                 <i className="fas fa-times"></i>
               </button>
@@ -128,9 +128,9 @@ const AllProducts = () => {
           {/* Sort Dropdown */}
           <div className="sort-dropdown">
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-              <option value="name">Sort by Name</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
+              <option value="name">Trier par Nom</option>
+              <option value="price-low">Prix : du plus bas au plus haut</option>
+              <option value="price-high">Prix : du plus haut au plus bas</option>
             </select>
           </div>
 
@@ -157,7 +157,7 @@ const AllProducts = () => {
             className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
             onClick={() => setSelectedCategory('all')}
           >
-            All Products
+            Tous les Produits
           </button>
           {categories.map((category, index) => (
             <button
@@ -175,7 +175,7 @@ const AllProducts = () => {
             <div className={`products ${viewMode}`}>
               {filteredProducts.map(product => (
                 <Link 
-                  to={`/product/${product.id}`}
+                  /* to={`/product/${product.id}`} */
                   key={product.id} 
                   className="product"
                 >
@@ -197,7 +197,7 @@ const AllProducts = () => {
                         </div>
                       )}
                     </div>
-                    <button className="view-details">View Details</button>
+                    <button className="view-details">Voir les Détails</button>
                   </div>
                 </Link>
               ))}
@@ -211,7 +211,7 @@ const AllProducts = () => {
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  &laquo; Previous
+                  &laquo; Précédent
                 </button>
                 
                 {renderPageNumbers()}
@@ -221,7 +221,7 @@ const AllProducts = () => {
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
-                  Next &raquo;
+                  Suivant &raquo;
                 </button>
               </div>
             )}
@@ -230,8 +230,8 @@ const AllProducts = () => {
           <>
             <div className="no-products">
               <i className="fas fa-box-open"></i>
-              <h3>No Products Found</h3>
-              <p>There are no products matching your search criteria.</p>
+              <h3>Aucun Produit Trouvé</h3>
+              <p>Aucun produit ne correspond à vos critères de recherche.</p>
             </div>
 
             {/* Show pagination even when no results on current page */}
@@ -242,7 +242,7 @@ const AllProducts = () => {
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  &laquo; Previous
+                  &laquo; Précédent
                 </button>
                 
                 {renderPageNumbers()}
@@ -252,7 +252,7 @@ const AllProducts = () => {
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
-                  Next &raquo;
+                  Suivant &raquo;
                 </button>
               </div>
             )}

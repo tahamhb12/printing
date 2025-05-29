@@ -33,14 +33,14 @@ const Contact = () => {
   return (
     <section ref={sectionRef} className="contact-section fade-in-section">
       <div className="container">
-        <h2>Get in Touch</h2>
+        <h2>Contactez-nous</h2>
         <div className="contact-content">
           <div className="contact-info">
-            <p>Have a question or want to work together? Fill out the form or contact us using the details below:</p>
+            <p>Vous avez une question ou souhaitez collaborer ? Remplissez le formulaire ou contactez-nous en utilisant les détails ci-dessous :</p>
             <ul>
-              <li><strong>Email:</strong> Imp.Merryconcept@gmail.com </li>
-              <li><strong>Phone:</strong> +212-661945584</li>
-              <li><strong>Address:</strong> Imm B6 Mag 18 El Bassama 2 Marjan Meknès - 50070</li>
+              <li><strong>Email :</strong> Imp.Merryconcept@gmail.com </li>
+              <li><strong>Téléphone :</strong> +212-661945584</li>
+              <li><strong>Adresse :</strong> Imm B6 Mag 18 El Bassama 2 Marjan Meknès - 50070</li>
             </ul>
             {/* Add social media links here */}
           </div>
@@ -58,10 +58,10 @@ const Contact = () => {
           </div>
           <div className="contact-form">
             <form>{/* Add form fields here */}
-              <input type="text" placeholder="Your Name" />
-              <input type="email" placeholder="Your Email" />
-              <textarea placeholder="Your Message"></textarea>
-              <button type="submit" className="submit-btn">Send Message</button>
+              <input type="text" placeholder="Votre Nom" />
+              <input type="email" placeholder="Votre Email" />
+              <textarea placeholder="Votre Message"></textarea>
+              <button type="submit" className="submit-btn">Envoyer le message</button>
             </form>
           </div>
         </div>

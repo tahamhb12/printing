@@ -33,8 +33,8 @@ const Login = () => {
   return (
     <div className="login-page-container">
       <div className="login-page-box">
-        <h1>Welcome Back</h1>
-        <p className="login-page-subtitle">Please enter your details to sign in</p>
+        <h1>Bienvenue de Nouveau</h1>
+        <p className="login-page-subtitle">Veuillez entrer vos informations pour vous connecter</p>
         
         <form onSubmit={handleSubmit} className="login-page-form">
           <div className="login-page-form-group">
@@ -45,20 +45,20 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              placeholder="Entrez votre email"
               required
             />
           </div>
 
           <div className="login-page-form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Entrez votre mot de passe"
               required
             />
           </div>
@@ -66,13 +66,13 @@ const Login = () => {
           <div className="login-page-form-options">
             <div className="login-page-remember-me">
               <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
+              <label htmlFor="remember">Se souvenir de moi</label>
             </div>
-            <a href="#" className="login-page-forgot-password">Forgot password?</a>
+            <a href="#" className="login-page-forgot-password">Mot de passe oublié ?</a>
           </div>
 
           <button type="submit" className="login-page-button">
-            Sign In
+            Se connecter
           </button>
 
           {/* <p className="login-page-signup-link">

@@ -32,13 +32,13 @@ const Navbar = () => {
                     <img src={logo} alt="logo" />
                 </div>
                 <div className={`links ${isMenuOpen ? 'active' : ''}`}>
-                    <Link to="/" onClick={closeMenu}>Home</Link>
-                    <Link to="/products" onClick={closeMenu}>Products</Link>
-                    <Link to="/contact" onClick={closeMenu}>Contact Us</Link>
-                    {!session?.user && <Link to="/login" onClick={closeMenu}>Login</Link>}
+                    <Link to="/" onClick={closeMenu}>Accueil</Link>
+                    <Link to="/products" onClick={closeMenu}>Produits</Link>
+                    <Link to="/contact" onClick={closeMenu}>Contactez-nous</Link>
+                    {!session?.user && <Link to="/login" onClick={closeMenu}>Connexion</Link>}
                     {/* {!session?.user && <Link to="/register" onClick={closeMenu}>Sign Up</Link>} */}
-                    {session?.user &&<Link to='/dashboard' onClick={closeMenu}>Dashboard</Link>}
-                    {session?.user &&<Link className="auth-button" onClick={() => { closeMenu(); signOut(); }}>Logout</Link>}
+                    {session?.user &&<Link to='/dashboard' onClick={closeMenu}>Tableau de Bord</Link>}
+                    {session?.user &&<Link className="auth-button" onClick={() => { closeMenu(); signOut(); }}>Déconnexion</Link>}
                 </div>
                 <div className="menu-toggle" onClick={toggleMenu}>
                     <div className={`hamburger ${isMenuOpen ? 'active' : ''}`}>

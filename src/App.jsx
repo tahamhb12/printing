@@ -68,11 +68,11 @@ function App() {
                   <Login />
                 </PublicRoute>
               } />
-              <Route path="/register" element={
+              {/* <Route path="/register" element={
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
-              } />
+              } /> */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                     <Dashboard />

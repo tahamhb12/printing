@@ -73,7 +73,7 @@ const Testimonials = () => {
   return (
     <section ref={sectionRef} className="testimonials-section fade-in-section">
       <div className="container">
-        <h2>What Our Customers Say</h2>
+        <h2>Ce que disent nos clients</h2>
         <div className="testimonials-grid">
           {testimonials.slice(0, 3).map(testimonial => (
             <div key={testimonial.id} className="testimonial-item">

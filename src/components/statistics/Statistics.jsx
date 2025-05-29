@@ -35,10 +35,10 @@ const Statistics = () => {
     <section ref={sectionRef} className="statistics-section fade-in-section">
       <div className="container">
         <div className="statistics-content">
-          <p className="section-subtitle">Statistic</p>
-          <h2>Printshop in<br/>Number</h2>
-          <p>Odio at elit mauris neque nisl odio elementum viverra sollicitudin. Ante sed aliquam et duis eu mauris. Tristique quisque amet turpis sed interdum non sollicitudin vulputate mi. Interdum in et ut sed semper ornare fames.</p>
-          <button className="learn-more-btn">Learn More</button>
+          <p className="section-subtitle">Statistiques</p>
+          <h2>Notre Imprimerie en<br/>Chiffres</h2>
+          <p>Transformez vos idées en réalité avec nos solutions d'impression de haute qualité. Rapide, fiable et parfait à chaque fois.</p>
+          <button className="learn-more-btn">En savoir plus</button>
         </div>
         <div className="statistics-numbers">
           <img src={img} alt="" />

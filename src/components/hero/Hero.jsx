@@ -11,16 +11,16 @@ const Hero = () => {
     <div className="hero">
       <div className="hero-content">
         <div className="hero-text">
-          <h1>Professional Printing Services</h1>
-          <p>Transform your ideas into reality with our high-quality printing solutions. Fast, reliable, and perfect every time.</p>
+          <h1>Services d'Impression Professionnels</h1>
+          <p>Transformez vos idées en réalité avec nos solutions d'impression de haute qualité. Rapide, fiable et parfait à chaque fois.</p>
           <div className="hero-buttons">
             <Link to="/products" onClick={scrollToTop} className="primary-btn">
               <i className="fas fa-print"></i>
-              <span>View Products</span>
+              <span>Voir les Produits</span>
             </Link>
             <Link to="/contact" onClick={scrollToTop} className="secondary-btn">
               <i className="fas fa-envelope"></i>
-              <span>Get in Touch</span>
+              <span>Contactez-nous</span>
             </Link>
           </div>
         </div>
@@ -32,18 +32,18 @@ const Hero = () => {
       <div className="hero-features">
         <div className="feature">
           <i className="fas fa-truck"></i>
-          <h3>Fast Delivery</h3>
-          <p>Quick turnaround time</p>
+          <h3>Livraison Rapide</h3>
+          <p>Délai d'exécution rapide</p>
         </div>
         <div className="feature">
           <i className="fas fa-medal"></i>
-          <h3>Premium Quality</h3>
-          <p>Best materials used</p>
+          <h3>Qualité Premium</h3>
+          <p>Meilleurs matériaux utilisés</p>
         </div>
         <div className="feature">
           <i className="fas fa-headset"></i>
-          <h3>24/7 Support</h3>
-          <p>Always here to help</p>
+          <h3>Support 24/7</h3>
+          <p>Toujours là pour vous aider</p>
         </div>
       </div>
     </div>

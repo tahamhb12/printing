@@ -49,7 +49,7 @@ const Categories = () => {
   return (
     <section ref={sectionRef} className="categories-section fade-in-section">
       <div className="container">
-        <h2>Explore by Category</h2>
+        <h2>Explorer par Catégorie</h2>
         <div className="categories-content">
           <div className="category-grid">
             {categories.slice(0, 3).map((category, index) => (

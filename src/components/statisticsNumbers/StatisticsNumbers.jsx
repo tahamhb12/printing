@@ -8,19 +8,19 @@ const StatisticsNumbers = () => {
         <div className="statistics-numbers-grid">
           <div className="statistic-item">
             <h3>22+</h3>
-            <p>Years Experience</p>
+            <p>Ans d'Expérience</p>
           </div>
           <div className="statistic-item">
             <h3>142+</h3>
-            <p>Completed Projects</p>
+            <p>Projets Réalisés</p>
           </div>
           <div className="statistic-item">
             <h3>362+</h3>
-            <p>Professional Team</p>
+            <p>Équipe Professionnelle</p>
           </div>
           <div className="statistic-item">
             <h3>99 %</h3>
-            <p>Satisfied Clients</p>
+            <p>Clients Satisfaits</p>
           </div>
         </div>
       </div>
