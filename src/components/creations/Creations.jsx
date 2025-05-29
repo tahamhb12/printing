@@ -53,7 +53,7 @@ const Creations = () => {
             </div>
           </div>
           <div className="creations-grid">
-            {[1, 2, 3, 4].map((index) => (
+            {[1, 2, 3, 4,5,6,7,8,9,10].map((index) => (
               <div 
                 key={index}
                 className={`creation-card ${hoveredIndex !== null && hoveredIndex !== index ? 'blurred' : ''}`}

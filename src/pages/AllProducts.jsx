@@ -6,6 +6,9 @@ import { UserAuth } from '../AuthContext/AuthContext';
 const AllProducts = () => {
   const { products, currentPage, totalPages, handlePageChange, categories } = UserAuth();
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('name');
+  const [viewMode, setViewMode] = useState('grid');
   const sectionRef = useRef(null);
   const location = useLocation();
 
@@ -39,10 +42,26 @@ const AllProducts = () => {
     };
   }, []);
 
-  // Filter products based on selected category
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
-    : products.filter(product => product.category === selectedCategory);
+  // Filter and sort products
+  const filteredProducts = products
+    .filter(product => {
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'price-low':
+          return a.price - b.price;
+        case 'price-high':
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
 
   // Generate page numbers
   const renderPageNumbers = () => {
@@ -74,7 +93,63 @@ const AllProducts = () => {
   return (
     <div ref={sectionRef} className="all-products fade-in-section">
       <div className="container">
-        <h2>All Products</h2>
+        <div className="products-header">
+          <h2>All Products</h2>
+          <div className="products-stats">
+            <span>{filteredProducts.length} products found</span>
+            {selectedCategory !== 'all' && (
+              <span className="category-badge">{selectedCategory}</span>
+            )}
+          </div>
+        </div>
+
+        <div className="products-controls">
+          {/* Search Bar */}
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery ? (
+              <button 
+                className="clear-search"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            ) : (
+              <i className="fas fa-search"></i>
+            )}
+          </div>
+
+          {/* Sort Dropdown */}
+          <div className="sort-dropdown">
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+              <option value="name">Sort by Name</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+
+          {/* View Toggle */}
+          <div className="view-toggle">
+            <button
+              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+            >
+              <i className="fas fa-th"></i>
+            </button>
+            <button
+              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+            >
+              <i className="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
         
         {/* Category Filter */}
         <div className="category-filter">
@@ -97,7 +172,7 @@ const AllProducts = () => {
         
         {filteredProducts && filteredProducts.length > 0 ? (
           <>
-            <div className="products">
+            <div className={`products ${viewMode}`}>
               {filteredProducts.map(product => (
                 <Link 
                   to={`/product/${product.id}`}
@@ -106,10 +181,23 @@ const AllProducts = () => {
                 >
                   <div className="img">
                     <img src={product.image_url} alt={product.name} />
+                    {product.discount && (
+                      <span className="discount-badge">-{product.discount}%</span>
+                    )}
                   </div>
                   <div className="infos">
-                    <h2 style={{textAlign:"left"}}>{product.name}</h2>
-                    <p>{product.description}</p>
+                    <h2>{product.name}</h2>
+                    <p className="description">{product.description}</p>
+                    <div className="product-meta">
+                      <span className="price">${product.price}</span>
+                      {product.rating && (
+                        <div className="rating">
+                          <i className="fas fa-star"></i>
+                          <span>{product.rating}</span>
+                        </div>
+                      )}
+                    </div>
+                    <button className="view-details">View Details</button>
                   </div>
                 </Link>
               ))}
@@ -139,11 +227,36 @@ const AllProducts = () => {
             )}
           </>
         ) : (
-          <div className="no-products">
-            <i className="fas fa-box-open"></i>
-            <h3>No Products Found</h3>
-            <p>There are no products available in this category.</p>
-          </div>
+          <>
+            <div className="no-products">
+              <i className="fas fa-box-open"></i>
+              <h3>No Products Found</h3>
+              <p>There are no products matching your search criteria.</p>
+            </div>
+
+            {/* Show pagination even when no results on current page */}
+            {totalPages > 1 && (
+              <div className="pagination">
+                <button
+                  className="page-nav"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  &laquo; Previous
+                </button>
+                
+                {renderPageNumbers()}
+                
+                <button
+                  className="page-nav"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next &raquo;
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

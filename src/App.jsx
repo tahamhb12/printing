@@ -11,7 +11,6 @@ import Creations from './components/creations/Creations'
 import Footer from './components/footer/Footer'
 import Testimonials from './components/testimonials/Testimonials'
 import Contact from './components/contact/Contact'
-import HowItWorks from './components/howitworks/HowItWorks'
 import AllProducts from './pages/AllProducts'
 import ContactPage from './pages/ContactPage'
 import Login from './pages/Login'
@@ -19,6 +18,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import ProductDetails from './pages/ProductDetails'
 import { AuthContextProvider, UserAuth } from './AuthContext/AuthContext'
+import StatisticsNumbers from './components/statisticsNumbers/StatisticsNumbers'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -51,13 +51,13 @@ function App() {
               <Route path="/" element={
                 <>
                   <Hero />
+                  <StatisticsNumbers />
                   <Statistics />
-                  <PopularProducts />
                   <Categories />
+                  <PopularProducts />
                   <Benefits />
                   <Creations />
                   <Testimonials />
-                  <HowItWorks />
                 </>
               } />
               <Route path="/products" element={<AllProducts />} />

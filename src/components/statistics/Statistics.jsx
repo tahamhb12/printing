@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './Statistics.css';
+import img from './img.png'
 
 const Statistics = () => {
   const sectionRef = useRef(null);
@@ -40,22 +41,7 @@ const Statistics = () => {
           <button className="learn-more-btn">Learn More</button>
         </div>
         <div className="statistics-numbers">
-          <div className="statistic-item">
-            <h3>15+</h3>
-            <p>Years of Experience</p>
-          </div>
-          <div className="statistic-item">
-            <h3>98%</h3>
-            <p>Satisfaction Rate</p>
-          </div>
-          <div className="statistic-item">
-            <h3>50+</h3>
-            <p>Diverse Product</p>
-          </div>
-          <div className="statistic-item">
-            <h3>10K</h3>
-            <p>Printing Capacity</p>
-          </div>
+          <img src={img} alt="" />
         </div>
       </div>
     </section>

@@ -32,7 +32,7 @@
 }
 
 .contact-item i {
-  color: #007bff;
+  color: var(--primary-color);;
   font-size: 1.1rem;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .social-link:hover {
-  color: #007bff;
+  color: var(--primary-color);;
 }
 
 @media (max-width: 834px) {

@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import image from './heroimage.png'
 
 const Hero = () => {
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
   return (
     <div className="hero">
       <div className="hero-content">
@@ -11,11 +14,11 @@ const Hero = () => {
           <h1>Professional Printing Services</h1>
           <p>Transform your ideas into reality with our high-quality printing solutions. Fast, reliable, and perfect every time.</p>
           <div className="hero-buttons">
-            <Link to="/products" className="primary-btn">
+            <Link to="/products" onClick={scrollToTop} className="primary-btn">
               <i className="fas fa-print"></i>
               <span>View Products</span>
             </Link>
-            <Link to="/contact" className="secondary-btn">
+            <Link to="/contact" onClick={scrollToTop} className="secondary-btn">
               <i className="fas fa-envelope"></i>
               <span>Get in Touch</span>
             </Link>

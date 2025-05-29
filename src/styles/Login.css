@@ -60,7 +60,7 @@
 
 .login-page-form-group input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--primary-color);;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
@@ -83,7 +83,7 @@
 }
 
 .login-page-forgot-password {
-  color: #2563eb;
+  color: var(--primary-color);;
   text-decoration: none;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .login-page-button {
-  background-color: #2563eb;
+  background-color: var(--primary-color);;
   color: white;
   padding: 0.75rem;
   border: none;
@@ -103,7 +103,7 @@
 }
 
 .login-page-button:hover {
-  background-color: #1d4ed8;
+  background-color: var(--primary-color);;
 }
 
 .login-page-signup-link {
@@ -113,7 +113,7 @@
 }
 
 .login-page-signup-link a {
-  color: #2563eb;
+  color: var(--primary-color);;
   text-decoration: none;
   font-weight: 500;
 }

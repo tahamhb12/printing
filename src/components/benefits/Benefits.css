@@ -43,7 +43,7 @@
 .benefit-icon svg, .benefit-icon img {
     width: 40px; /* Size of the actual icon */
     height: 40px;
-    color: #ff0000; /* Red color for icons, adjust as needed */
+    color: var(--primary-color); /* Red color for icons, adjust as needed */
 }
 
 .benefit-item h3 {

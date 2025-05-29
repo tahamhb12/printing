@@ -10,6 +10,9 @@ const Categories = () => {
   const sectionRef = useRef(null);
   const {categories} = UserAuth();
   const navigate = useNavigate();
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,6 +42,7 @@ const Categories = () => {
 
   const handleCategoryClick = (category) => {
     navigate('/products', { state: { selectedCategory: category } });
+    scrollToTop()
   };
 
   const categoryImages = [img1, img2, img3];

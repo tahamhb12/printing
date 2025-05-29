@@ -34,21 +34,39 @@ const Testimonials = () => {
   const testimonials = [
     {
       id: 1,
-      quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      author: "John Doe",
-      title: "Happy Customer"
+      quote: "Tres bon service.",
+      author: "Wadie Wadie",
+      date: "2025-05-08",
+      rating: 5,
+      source: "Google",
+      avatar: "R"
     },
     {
       id: 2,
-      quote: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      author: "Jane Smith",
-      title: "Satisfied Client"
+      quote: "A7ssen service o khdma wa3ra ❤️",
+      author: "Anas Khouya",
+      date: "2025-05-03",
+      rating: 5,
+      source: "Google",
+      avatar: "A"
     },
     {
       id: 3,
-      quote: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      author: "Peter Jones",
-      title: "Great Experience"
+      quote: "Très belle expérience. Rapidité et prise en charge irréprochables. Je salue le professionnalisme et...",
+      author: "Hassar Mona",
+      date: "2025-04-30",
+      rating: 5,
+      source: "Google",
+      avatar: "H"
+    },
+    {
+      id: 4,
+      quote: "Très bon service",
+      author: "Hamza Ouhayou",
+      date: "2025-04-28",
+      rating: 5,
+      source: "Google",
+      avatar: "H"
     }
   ];
 
@@ -57,11 +75,21 @@ const Testimonials = () => {
       <div className="container">
         <h2>What Our Customers Say</h2>
         <div className="testimonials-grid">
-          {testimonials.map(testimonial => (
+          {testimonials.slice(0, 3).map(testimonial => (
             <div key={testimonial.id} className="testimonial-item">
-              <p className="quote">"{testimonial.quote}"</p>
-              <p className="author">- {testimonial.author}</p>
-              <p className="title">{testimonial.title}</p>
+              <div className="testimonial-meta">
+                <div className="user-info">
+                  <div className="avatar">{testimonial.avatar}</div>
+                  <div className="name-date">
+                    <p className="author">{testimonial.author}</p>
+                    <p className="date">{testimonial.date}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="testimonial-rating">
+                 {'★'.repeat(testimonial.rating)}{'☆'.repeat(5 - testimonial.rating)}
+              </div>
+              <p className="quote">{testimonial.quote}</p>
             </div>
           ))}
         </div>

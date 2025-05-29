@@ -2,9 +2,12 @@ import React from 'react';
 import './Footer.css';
 import logo from '../navbar/logo.png'; // Assuming the logo is in the same location as the navbar logo
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const navigate = useNavigate()
   const scrollToTop = () => {
+    navigate('/')
     window.scrollTo(0, 0);
   };
 
@@ -12,7 +15,7 @@ const Footer = () => {
     <footer className="footer-section">
       <div className="container">
         <div className="footer-content">
-          <div className="footer-logo">
+          <div onClick={scrollToTop} className="footer-logo">
             <img src={logo} alt="logo" />
           </div>
           <div className="footer-links">

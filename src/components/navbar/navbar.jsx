@@ -14,7 +14,11 @@ const Navbar = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-
+    const scrollToTop = () => {
+        navigate('/')
+        window.scrollTo(0, 0);
+      };
+    
     const closeMenu = () => {
         setIsMenuOpen(false);
         window.scrollTo(0, 0);
@@ -24,7 +28,7 @@ const Navbar = () => {
     return ( 
         <nav>
             <div className="container">
-                <div onClick={()=>navigate('/')} className="logo">
+                <div onClick={scrollToTop} className="logo">
                     <img src={logo} alt="logo" />
                 </div>
                 <div className={`links ${isMenuOpen ? 'active' : ''}`}>

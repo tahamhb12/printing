@@ -16,7 +16,7 @@
 .featured-card {
     width: 300px; /* Fixed width for the featured card */
     flex-shrink: 0; /* Prevent shrinking */
-    background-color: #ff0000; /* Red background */
+    background-color: var(--primary-color); /* Red background */
     color: #fff; /* White text */
     padding: 40px;
     border-radius: 10px;
@@ -58,7 +58,7 @@
 
 .arrow-button {
     background-color: #fff; /* White background */
-    color: #ff0000; /* Red arrow */
+    color: var(--primary-color); /* Red arrow */
     border: none;
     border-radius: 50%; /* Circular button */
     width: 30px; /* Adjust size */
@@ -100,10 +100,11 @@
     justify-content: center;
     align-items: center;
     transition: all .6s ease;
+    filter: brightness(0.2); /* Make all cards blacked out by default */
 }
 
-.creation-card.blurred {
-    filter: brightness(0.4);
+.creation-card:hover {
+    filter: brightness(1); /* Show full brightness on hover */
 }
 
 .creation-image {
@@ -134,6 +135,36 @@
 }
 .creation-card:nth-child(4) {
     background-image: url(./img4.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.creation-card:nth-child(5) {
+    background-image: url(./img5.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.creation-card:nth-child(6) {
+    background-image: url(./img6.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.creation-card:nth-child(7) {
+    background-image: url(./img7.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.creation-card:nth-child(8) {
+    background-image: url(./img8.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.creation-card:nth-child(9) {
+    background-image: url(./img9.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.creation-card:nth-child(10) {
+    background-image: url(./img10.png);
     background-size: cover;
     background-repeat: no-repeat;
 }

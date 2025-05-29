@@ -66,7 +66,7 @@
 
 .register-page-form-group input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--primary-color);;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
@@ -85,7 +85,7 @@
 }
 
 .register-page-terms a {
-  color: #2563eb;
+  color: var(--primary-color);;
   text-decoration: none;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .register-page-button {
-  background-color: #2563eb;
+  background-color: var(--primary-color);;
   color: white;
   padding: 0.75rem;
   border: none;
@@ -105,7 +105,7 @@
 }
 
 .register-page-button:hover {
-  background-color: #1d4ed8;
+  background-color: var(--primary-color);;
 }
 
 .register-page-login-link {
@@ -115,7 +115,7 @@
 }
 
 .register-page-login-link a {
-  color: #2563eb;
+  color: var(--primary-color);;
   text-decoration: none;
   font-weight: 500;
 }

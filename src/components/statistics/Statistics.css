@@ -1,12 +1,12 @@
 .statistics-section {
     background-color: #f8f8f8; /* Light grey background */
     padding: 80px 0;
-
 }
 
 .statistics-section .container {
     display: flex; /* Enable flexbox for the container */
     gap: 40px; /* Add space between content and statistics numbers */
+    align-items: center;
 }
 
 .statistics-content {
@@ -39,7 +39,7 @@
 
 .learn-more-btn {
     display: inline-block;
-    background-color: #ff6600; /* Orange background */
+    background-color: var(--primary-color);; /* Orange background */
     color: #fff; /* White text */
     padding: 12px 25px;
     text-decoration: none;
@@ -56,40 +56,41 @@
 
 .statistics-numbers {
     flex: 1; /* Allow statistics numbers to take up available space */
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
-    gap: 30px; /* Space between statistic items */
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.statistic-item {
-    text-align: center;
+.statistics-numbers img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
 }
 
-.statistic-item h3 {
-    font-size: 3em; /* Large number font size */
-    color: #000;
-    margin-bottom: 5px;
-}
-
-.statistic-item p {
-    font-size: 1em;
-    color: #666;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .statistics-section .container {
-        flex-direction: column; /* Stack content and statistics vertically on smaller screens */
-        align-items: center;
+        flex-direction: column;
+        text-align: center;
     }
 
     .statistics-content {
-        max-width: 100%; /* Allow content to take full width */
-        text-align: center; /* Center-align text */
-        margin-bottom: 40px; /* Add space below content */
+        max-width: 100%;
+        margin-bottom: 40px;
     }
 
-    .statistics-numbers {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust grid for smaller screens */
+    .statistics-numbers img {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .statistics-section {
+        padding: 60px 0;
+    }
+
+    .statistics-content h2 {
+        font-size: 2em;
     }
 } 

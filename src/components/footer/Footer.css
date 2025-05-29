@@ -1,5 +1,5 @@
 .footer-section {
-    background-color: #333; /* Dark background */
+    background-color: #1a1a1a; /* Dark background */
     color: #fff; /* White text */
     padding: 40px 0;
 }
@@ -12,7 +12,7 @@
 }
 
 .footer-logo img {
-    height: 50px; /* Adjust logo size */
+    height: 149px; /* Adjust logo size */
 }
 
 .footer-links h3,

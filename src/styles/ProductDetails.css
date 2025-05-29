@@ -44,7 +44,7 @@
 }
 
 .thumbnail-images img.active {
-  border: 2px solid #007bff;
+  border: 2px solid var(--primary-color);;
 }
 
 .product-info {
@@ -73,7 +73,7 @@
 .current-price {
   font-size: 2rem;
   font-weight: bold;
-  color: #007bff;
+  color: var(--primary-color);;
 }
 
 .original-price {
@@ -172,7 +172,7 @@
 
 .features li::before {
   content: "✓";
-  color: #007bff;
+  color: var(--primary-color);;
   position: absolute;
   left: 0;
 }
@@ -189,7 +189,7 @@
 .add-to-cart {
   width: 100%;
   padding: 1rem;
-  background-color: #007bff;
+  background-color: var(--primary-color);;
   color: white;
   border: none;
   border-radius: 8px;
@@ -288,7 +288,7 @@
 
 .related-product-card .price {
   padding: 0 1rem 1rem;
-  color: #007bff;
+  color: var(--primary-color);;
   font-weight: bold;
   margin: 0;
 }
