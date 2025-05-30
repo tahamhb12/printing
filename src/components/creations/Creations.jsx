@@ -47,7 +47,7 @@ const Creations = () => {
             <h2>Nos<br/>Collabs</h2>
             <p className="subtitle">Conçu dans notre<br/>studio</p>
             <div className="more-link">
-              <span>Plus</span>
+              <span>Glisser</span>
               <div className="progress-bar"></div>
               <button className="arrow-button">&rarr;</button> {/* Or an actual arrow icon */}
             </div>

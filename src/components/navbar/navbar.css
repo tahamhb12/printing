@@ -97,11 +97,9 @@ nav .container .links .auth-button:hover {
     transform: translateY(-9px) rotate(-45deg);
 }
 @media (max-width: 1024px) {
-    nav .container .links{
+/*     nav .container .links{
         gap: 14px;
-    }
-}
-@media (max-width: 768px) {
+    } */
     .menu-toggle {
         display: block;
     }
@@ -125,3 +123,7 @@ nav .container .links .auth-button:hover {
         height: 100%;
     }
 }
+/* @media (max-width: 768px) {
+
+}
+ */

@@ -50,9 +50,9 @@
     cursor: pointer;
 }
 
-.learn-more-btn:hover {
-    background-color: #e65c00; /* Darker orange on hover */
-}
+/* .learn-more-btn:hover {
+    background-color: #e65c00; 
+} */
 
 .statistics-numbers {
     flex: 1; /* Allow statistics numbers to take up available space */

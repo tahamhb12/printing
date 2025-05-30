@@ -22,9 +22,9 @@ const Footer = () => {
             <h3>Liens Rapides</h3>
             <ul>
               <li><Link to="/" onClick={scrollToTop}>Accueil</Link></li>
-              <li><Link to="#" onClick={scrollToTop}>À Propos</Link></li>
               <li><Link to="/products" onClick={scrollToTop}>Produits</Link></li>
               <li><Link to="/contact" onClick={scrollToTop}>Contact</Link></li>
+              <li><Link to="#" onClick={scrollToTop}>À Propos</Link></li>
             </ul>
           </div>
           <div className="footer-description">
