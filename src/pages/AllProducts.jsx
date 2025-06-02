@@ -42,26 +42,38 @@ const AllProducts = () => {
     };
   }, []);
 
-  // Filter and sort products
-  const filteredProducts = products
-    .filter(product => {
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        default:
-          return 0;
-      }
-    });
+  // Handle category change
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    handlePageChange(1, category, searchQuery);
+  };
+
+  // Handle search change
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    handlePageChange(1, selectedCategory, value);
+  };
+
+  // Handle search clear
+  const handleSearchClear = () => {
+    setSearchQuery('');
+    handlePageChange(1, selectedCategory, '');
+  };
+
+  // Sort products
+  const sortedProducts = [...products].sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name);
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      default:
+        return 0;
+    }
+  });
 
   // Generate page numbers
   const renderPageNumbers = () => {
@@ -79,7 +91,7 @@ const AllProducts = () => {
       pageNumbers.push(
         <button
           key={i}
-          onClick={() => handlePageChange(i)}
+          onClick={() => handlePageChange(i, selectedCategory, searchQuery)}
           className={`page-number ${currentPage === i ? 'active' : ''}`}
         >
           {i}
@@ -96,7 +108,7 @@ const AllProducts = () => {
         <div className="products-header">
           <h2>Tous les Produits</h2>
           <div className="products-stats">
-            <span>{filteredProducts.length} produits trouvés</span>
+            <span>{products.length} produits trouvés</span>
             {selectedCategory !== 'all' && (
               <span className="category-badge">{selectedCategory}</span>
             )}
@@ -110,12 +122,12 @@ const AllProducts = () => {
               type="text"
               placeholder="Rechercher des produits..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
             />
             {searchQuery ? (
               <button 
                 className="clear-search"
-                onClick={() => setSearchQuery('')}
+                onClick={handleSearchClear}
                 aria-label="Effacer la recherche"
               >
                 <i className="fas fa-times"></i>
@@ -155,7 +167,7 @@ const AllProducts = () => {
         <div className="category-filter">
           <button 
             className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => handleCategoryChange('all')}
           >
             Tous les Produits
           </button>
@@ -163,19 +175,19 @@ const AllProducts = () => {
             <button
               key={index}
               className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => handleCategoryChange(category)}
             >
               {category}
             </button>
           ))}
         </div>
         
-        {filteredProducts && filteredProducts.length > 0 ? (
+        {sortedProducts && sortedProducts.length > 0 ? (
           <>
             <div className={`products ${viewMode}`}>
-              {filteredProducts.map(product => (
+              {sortedProducts.map((product) => (
                 <Link 
-                  /* to={`/product/${product.id}`} */
+                  to={`/product/${product.id}`}
                   key={product.id} 
                   className="product"
                 >
@@ -208,7 +220,7 @@ const AllProducts = () => {
               <div className="pagination">
                 <button
                   className="page-nav"
-                  onClick={() => handlePageChange(currentPage - 1)}
+                  onClick={() => handlePageChange(currentPage - 1, selectedCategory, searchQuery)}
                   disabled={currentPage === 1}
                 >
                   &laquo; Précédent
@@ -218,7 +230,7 @@ const AllProducts = () => {
                 
                 <button
                   className="page-nav"
-                  onClick={() => handlePageChange(currentPage + 1)}
+                  onClick={() => handlePageChange(currentPage + 1, selectedCategory, searchQuery)}
                   disabled={currentPage === totalPages}
                 >
                   Suivant &raquo;
@@ -239,7 +251,7 @@ const AllProducts = () => {
               <div className="pagination">
                 <button
                   className="page-nav"
-                  onClick={() => handlePageChange(currentPage - 1)}
+                  onClick={() => handlePageChange(currentPage - 1, selectedCategory, searchQuery)}
                   disabled={currentPage === 1}
                 >
                   &laquo; Précédent
@@ -249,7 +261,7 @@ const AllProducts = () => {
                 
                 <button
                   className="page-nav"
-                  onClick={() => handlePageChange(currentPage + 1)}
+                  onClick={() => handlePageChange(currentPage + 1, selectedCategory, searchQuery)}
                   disabled={currentPage === totalPages}
                 >
                   Suivant &raquo;

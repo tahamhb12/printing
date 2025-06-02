@@ -5,7 +5,7 @@ import { UserAuth } from '../AuthContext/AuthContext';
 import { Link } from 'react-router-dom';
 
 // Move EditModal outside of Dashboard component
-const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpdateProduct, categories, handleEditPhotoChange, editPreviewUrl }) => {
+const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpdateProduct, handleEditPhotoChange, editPreviewUrl, categories, handleEditVariantChange, handleEditVariantOptionChange, addEditVariantOption, removeEditVariantOption, addEditVariant, removeEditVariant }) => {
   if (!isOpen) return null;
 
   return (
@@ -62,7 +62,7 @@ const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpda
             />
           </div>
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="edit-price">Price ($)</label>
             <input
               type="number"
@@ -74,7 +74,7 @@ const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpda
               step="0.01"
               min="0"
             />
-          </div>
+          </div> */}
 
           <div className="form-group">
             <label htmlFor="edit-category">Category</label>
@@ -91,6 +91,63 @@ const EditModal = ({ isOpen, onClose, editFormData, handleEditChange, handleUpda
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="form-group">
+            <label>Variants</label>
+            {editFormData.variants.map((variant, variantIndex) => (
+              <div key={variantIndex} className="variant-group">
+                <div className="variant-header">
+                  <input
+                    type="text"
+                    value={variant.variant}
+                    onChange={(e) => handleEditVariantChange(variantIndex, 'variant', e.target.value)}
+                    placeholder="Variant name (e.g., Color, Size)"
+                  />
+                  <button
+                    type="button"
+                    className="remove-variant"
+                    onClick={() => removeEditVariant(variantIndex)}
+                  >
+                    Remove Variant
+                  </button>
+                </div>
+                
+                <div className="options-list">
+                  {variant.options.map((option, optionIndex) => (
+                    <div key={optionIndex} className="option-item">
+                      <input
+                        type="text"
+                        value={option}
+                        onChange={(e) => handleEditVariantOptionChange(variantIndex, optionIndex, e.target.value)}
+                        placeholder={`Option ${optionIndex + 1}`}
+                      />
+                      <button
+                        type="button"
+                        className="remove-option"
+                        onClick={() => removeEditVariantOption(variantIndex, optionIndex)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="add-option"
+                    onClick={() => addEditVariantOption(variantIndex)}
+                  >
+                    Add Option
+                  </button>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="add-variant"
+              onClick={addEditVariant}
+            >
+              Add Variant
+            </button>
           </div>
 
           <div className="form-actions">
@@ -113,8 +170,12 @@ const Dashboard = () => {
   const [productData, setProductData] = useState({
     name: '',
     description: '',
-    price: '',
+    /* price: '', */
     category: '',
+    variants: [
+      { variant: 'Color', options: [] },
+      { variant: 'Size', options: [] }
+    ]
   });
   const [showEditModal, setShowEditModal] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -122,9 +183,13 @@ const Dashboard = () => {
   const [editFormData, setEditFormData] = useState({
     name: '',
     description: '',
-    price: '',
+    /* price: '', */
     category: '',
-    image_url: ''
+    image_url: '',
+    variants: [
+      { variant: 'Color', options: [] },
+      { variant: 'Size', options: [] }
+    ]
   });
   const [editPreviewUrl, setEditPreviewUrl] = useState(null);
 
@@ -305,8 +370,12 @@ const Dashboard = () => {
         setProductData({
           name: '',
           description: '',
-          price: '',
+          /* price: '', */
           category: '',
+          variants: [
+            { variant: 'Color', options: [] },
+            { variant: 'Size', options: [] }
+          ]
         });
         setSelectedFile(null);
         setPreviewUrl(null);
@@ -325,12 +394,15 @@ const Dashboard = () => {
     setEditFormData({
       name: product.name || '',
       description: product.description || '',
-      price: product.price || '',
+      /* price: product.price || '', */
       category: product.category || '',
-      image_url: product.image_url || ''
+      image_url: product.image_url || '',
+      variants: product.variants || [
+        { variant: 'Color', options: [] },
+        { variant: 'Size', options: [] }
+      ]
     });
-    setEditSelectedFile(null);
-    setEditPreviewUrl(null);
+    setEditPreviewUrl(product.image_url);
     setShowEditModal(true);
   };
 
@@ -349,9 +421,10 @@ const Dashboard = () => {
     try {
       let updateData = {
         name: editFormData.name,
-        price: editFormData.price,
+        /* price: editFormData.price, */
         description: editFormData.description,
-        category: editFormData.category
+        category: editFormData.category,
+        variants: editFormData.variants
       };
 
       // If new image is selected, upload it and delete the old one
@@ -404,9 +477,13 @@ const Dashboard = () => {
         setEditFormData({
           name: '',
           description: '',
-          price: '',
+          /* price: '', */
           category: '',
-          image_url: ''
+          image_url: '',
+          variants: [
+            { variant: 'Color', options: [] },
+            { variant: 'Size', options: [] }
+          ]
         });
         setShowEditModal(false);
         setEditSelectedFile(null);
@@ -459,9 +536,13 @@ const Dashboard = () => {
         setEditFormData({
           name: '',
           description: '',
-          price: '',
+          /* price: '', */
           category: '',
-          image_url: ''
+          image_url: '',
+          variants: [
+            { variant: 'Color', options: [] },
+            { variant: 'Size', options: [] }
+          ]
         });
         setShowEditModal(false);
         setEditSelectedFile(null);
@@ -557,7 +638,7 @@ const Dashboard = () => {
             </div>
 
             <div className="form-row">
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label htmlFor="price">Price ($)</label>
                 <input
                   type="number"
@@ -570,7 +651,7 @@ const Dashboard = () => {
                   min="0"
                   required
                 />
-              </div>
+              </div> */}
 
               <div className="form-group">
                 <label htmlFor="category">Category</label>
@@ -589,6 +670,63 @@ const Dashboard = () => {
                   ))}
                 </select>
               </div>
+            </div>
+
+            <div className="form-group">
+              <label>Variants</label>
+              {productData.variants.map((variant, variantIndex) => (
+                <div key={variantIndex} className="variant-group">
+                  <div className="variant-header">
+                    <input
+                      type="text"
+                      value={variant.variant}
+                      onChange={(e) => handleVariantChange(variantIndex, 'variant', e.target.value)}
+                      placeholder="Variant name (e.g., Color, Size)"
+                    />
+                    <button
+                      type="button"
+                      className="remove-variant"
+                      onClick={() => removeVariant(variantIndex)}
+                    >
+                      Remove Variant
+                    </button>
+                  </div>
+                  
+                  <div className="options-list">
+                    {variant.options.map((option, optionIndex) => (
+                      <div key={optionIndex} className="option-item">
+                        <input
+                          type="text"
+                          value={option}
+                          onChange={(e) => handleVariantOptionChange(variantIndex, optionIndex, e.target.value)}
+                          placeholder={`Option ${optionIndex + 1}`}
+                        />
+                        <button
+                          type="button"
+                          className="remove-option"
+                          onClick={() => removeVariantOption(variantIndex, optionIndex)}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="add-option"
+                      onClick={() => addVariantOption(variantIndex)}
+                    >
+                      Add Option
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="add-variant"
+                onClick={addVariant}
+              >
+                Add Variant
+              </button>
             </div>
           </div>
         </div>
@@ -612,7 +750,8 @@ const Dashboard = () => {
               <th>Name</th>
               <th>Description</th>
               <th>Category</th>
-              <th>Price</th>
+              {/* <th>Price</th> */}
+              <th>Variants</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -631,7 +770,21 @@ const Dashboard = () => {
                 <td>{product.name || 'N/A'}</td>
                 <td>{product.description || 'N/A'}</td>
                 <td>{product.category || 'N/A'}</td>
-                <td>${product.price || '0.00'}</td>
+                {/* <td>${product.price || '0.00'}</td> */}
+                <td>
+                  {product.variants && product.variants.length > 0 ? (
+                    <div className="variants-list">
+                      {product.variants.map((variant, index) => (
+                        <div key={index} className="variant-item">
+                          <strong>{variant.variant}:</strong>
+                          <span>{variant.options.join(', ')}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    'No variants'
+                  )}
+                </td>
                 <td>
                   <div className="action-buttons">
                     <button
@@ -679,6 +832,82 @@ const Dashboard = () => {
     </div>
   );
 
+  // Add these new handlers
+  const handleVariantChange = (index, field, value) => {
+    const newVariants = [...productData.variants];
+    newVariants[index] = { ...newVariants[index], [field]: value };
+    setProductData({ ...productData, variants: newVariants });
+  };
+
+  const handleVariantOptionChange = (variantIndex, optionIndex, value) => {
+    const newVariants = [...productData.variants];
+    newVariants[variantIndex].options[optionIndex] = value;
+    setProductData({ ...productData, variants: newVariants });
+  };
+
+  const addVariantOption = (variantIndex) => {
+    const newVariants = [...productData.variants];
+    newVariants[variantIndex].options.push('');
+    setProductData({ ...productData, variants: newVariants });
+  };
+
+  const removeVariantOption = (variantIndex, optionIndex) => {
+    const newVariants = [...productData.variants];
+    newVariants[variantIndex].options.splice(optionIndex, 1);
+    setProductData({ ...productData, variants: newVariants });
+  };
+
+  const addVariant = () => {
+    setProductData({
+      ...productData,
+      variants: [...productData.variants, { variant: '', options: [] }]
+    });
+  };
+
+  const removeVariant = (index) => {
+    const newVariants = [...productData.variants];
+    newVariants.splice(index, 1);
+    setProductData({ ...productData, variants: newVariants });
+  };
+
+  // Add similar handlers for edit form
+  const handleEditVariantChange = (index, field, value) => {
+    const newVariants = [...editFormData.variants];
+    newVariants[index] = { ...newVariants[index], [field]: value };
+    setEditFormData({ ...editFormData, variants: newVariants });
+  };
+
+  const handleEditVariantOptionChange = (variantIndex, optionIndex, value) => {
+    const newVariants = [...editFormData.variants];
+    newVariants[variantIndex].options[optionIndex] = value;
+    setEditFormData({ ...editFormData, variants: newVariants });
+  };
+
+  const addEditVariantOption = (variantIndex) => {
+    const newVariants = [...editFormData.variants];
+    newVariants[variantIndex].options.push('');
+    setEditFormData({ ...editFormData, variants: newVariants });
+  };
+
+  const removeEditVariantOption = (variantIndex, optionIndex) => {
+    const newVariants = [...editFormData.variants];
+    newVariants[variantIndex].options.splice(optionIndex, 1);
+    setEditFormData({ ...editFormData, variants: newVariants });
+  };
+
+  const addEditVariant = () => {
+    setEditFormData({
+      ...editFormData,
+      variants: [...editFormData.variants, { variant: '', options: [] }]
+    });
+  };
+
+  const removeEditVariant = (index) => {
+    const newVariants = [...editFormData.variants];
+    newVariants.splice(index, 1);
+    setEditFormData({ ...editFormData, variants: newVariants });
+  };
+
   return (
     <div ref={sectionRef} className="dashboard-container">
       <div className="dashboard-header">
@@ -713,6 +942,12 @@ const Dashboard = () => {
         handleEditPhotoChange={handleEditPhotoChange}
         editPreviewUrl={editPreviewUrl}
         categories={categories}
+        handleEditVariantChange={handleEditVariantChange}
+        handleEditVariantOptionChange={handleEditVariantOptionChange}
+        addEditVariantOption={addEditVariantOption}
+        removeEditVariantOption={removeEditVariantOption}
+        addEditVariant={addEditVariant}
+        removeEditVariant={removeEditVariant}
       />
     </div>
   );

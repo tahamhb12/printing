@@ -11,7 +11,7 @@ export const AuthContextProvider = ({children}) =>{
     const [products, setproducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const productsPerPage = 8;
+    const productsPerPage = 9;
     const categories = [
       'publicité industrielle',
       'papeterie',
@@ -81,12 +81,24 @@ export const AuthContextProvider = ({children}) =>{
       },[])
 
     //fetch products with pagination
-    const fetchProducts = async (page = 1) => {
+    const fetchProducts = async (page = 1, category = 'all', search = '') => {
       try {
-        // First, get total count
-        const { count, error: countError } = await supabase
+        let query = supabase
           .from('products')
-          .select('*', { count: 'exact', head: true });
+          .select('id,name,price,description,category,image_url,variants', { count: 'exact' });
+
+        // Apply category filter if not 'all'
+        if (category !== 'all') {
+          query = query.eq('category', category);
+        }
+
+        // Apply search filter if search term exists
+        if (search) {
+          query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`);
+        }
+
+        // Get total count with filters
+        const { count, error: countError } = await query;
 
         if (countError) {
           console.error('Error getting count:', countError);
@@ -97,10 +109,8 @@ export const AuthContextProvider = ({children}) =>{
         const total = Math.ceil(count / productsPerPage);
         setTotalPages(total);
 
-        // Fetch paginated products
-        const { data, error } = await supabase
-          .from('products')
-          .select('id,name,price,description,category,image_url')
+        // Fetch paginated products with filters
+        const { data, error } = await query
           .range((page - 1) * productsPerPage, page * productsPerPage - 1)
           .order('created_at', { ascending: false });
 
@@ -116,11 +126,10 @@ export const AuthContextProvider = ({children}) =>{
       }
     };
 
-
     // Handle page change
-    const handlePageChange = (newPage) => {
+    const handlePageChange = (newPage, category = 'all', search = '') => {
       if (newPage >= 1 && newPage <= totalPages) {
-        fetchProducts(newPage);
+        fetchProducts(newPage, category, search);
       }
     };
 
