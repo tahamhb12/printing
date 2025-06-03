@@ -41,8 +41,7 @@ const PublicRoute = ({ children }) => {
 
 function App() {
   return (
-    <h2>Fixing</h2>
-    /* <Router>
+    <Router>
       <AuthContextProvider>
         <div className="app">
           <TopBar />
@@ -79,7 +78,7 @@ function App() {
           <Footer />
         </div>
       </AuthContextProvider>
-    </Router> */
+    </Router>
   )
 }
 

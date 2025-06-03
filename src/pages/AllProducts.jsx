@@ -1,21 +1,47 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './AllProducts.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { UserAuth } from '../AuthContext/AuthContext';
 
 const AllProducts = () => {
-  const { products, currentPage, totalPages, handlePageChange, categories } = UserAuth();
+  const { products, currentPage, totalPages, handlePageChange, categories, isLoading, error } = UserAuth();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const [viewMode, setViewMode] = useState('grid');
   const sectionRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Reset filters when component mounts or unmounts
+  useEffect(() => {
+    // Reset function
+    const resetFilters = () => {
+      setSelectedCategory('all');
+      setSearchQuery('');
+      setSortBy('name');
+      setViewMode('grid');
+      handlePageChange(1, 'all', '', 'name');
+    };
+
+    // Only reset if we're not coming from a category selection
+    if (!location.state?.selectedCategory) {
+      resetFilters();
+    }
+
+    // Cleanup function to reset filters when component unmounts
+    return () => {
+      resetFilters();
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     // Check if there's a category in the navigation state
     if (location.state?.selectedCategory) {
       setSelectedCategory(location.state.selectedCategory);
+      handlePageChange(1, location.state.selectedCategory, '', sortBy);
+      // Clear the navigation state after using it
+      navigate(location.pathname, { replace: true });
     }
   }, [location.state]);
 
@@ -45,35 +71,41 @@ const AllProducts = () => {
   // Handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    handlePageChange(1, category, searchQuery);
+    // Keep the current search query when changing category
+    handlePageChange(1, category, searchQuery, sortBy);
   };
 
-  // Handle search change
+  // Handle search change with debounce
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-    handlePageChange(1, selectedCategory, value);
+    
+    // Clear any existing timeout
+    if (window.searchTimeout) {
+      clearTimeout(window.searchTimeout);
+    }
+    
+    // Set a new timeout
+    window.searchTimeout = setTimeout(() => {
+      // Keep the current category when searching
+      handlePageChange(1, selectedCategory, value, sortBy);
+    }, 300); // 300ms delay
   };
 
   // Handle search clear
   const handleSearchClear = () => {
     setSearchQuery('');
-    handlePageChange(1, selectedCategory, '');
+    // Keep the current category when clearing search
+    handlePageChange(1, selectedCategory, '', sortBy);
   };
 
-  // Sort products
-  const sortedProducts = [...products].sort((a, b) => {
-    switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name);
-      case 'price-low':
-        return a.price - b.price;
-      case 'price-high':
-        return b.price - a.price;
-      default:
-        return 0;
-    }
-  });
+  // Handle sort change
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+    setSortBy(value);
+    // Keep both search and category when changing sort
+    handlePageChange(1, selectedCategory, searchQuery, value);
+  };
 
   // Generate page numbers
   const renderPageNumbers = () => {
@@ -91,7 +123,7 @@ const AllProducts = () => {
       pageNumbers.push(
         <button
           key={i}
-          onClick={() => handlePageChange(i, selectedCategory, searchQuery)}
+          onClick={() => handlePageChange(i, selectedCategory, searchQuery, sortBy)}
           className={`page-number ${currentPage === i ? 'active' : ''}`}
         >
           {i}
@@ -139,7 +171,10 @@ const AllProducts = () => {
 
           {/* Sort Dropdown */}
           <div className="sort-dropdown">
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <select 
+              value={sortBy} 
+              onChange={handleSortChange}
+            >
               <option value="name">Trier par Nom</option>
               <option value="price-low">Prix : du plus bas au plus haut</option>
               <option value="price-high">Prix : du plus haut au plus bas</option>
@@ -181,11 +216,24 @@ const AllProducts = () => {
             </button>
           ))}
         </div>
-        
-        {sortedProducts && sortedProducts.length > 0 ? (
+
+        {isLoading ? (
+          <div className="loading-state">
+            <i className="fas fa-spinner fa-spin"></i>
+            <p>Chargement des produits...</p>
+          </div>
+        ) : error ? (
+          <div className="error-state">
+            <i className="fas fa-exclamation-circle"></i>
+            <p>{error}</p>
+            <button onClick={() => handlePageChange(1, selectedCategory, searchQuery, sortBy)}>
+              Réessayer
+            </button>
+          </div>
+        ) : products && products.length > 0 ? (
           <>
             <div className={`products ${viewMode}`}>
-              {sortedProducts.map((product) => (
+              {products.map((product) => (
                 <Link 
                   to={`/product/${product.id}`}
                   key={product.id} 
@@ -220,7 +268,7 @@ const AllProducts = () => {
               <div className="pagination">
                 <button
                   className="page-nav"
-                  onClick={() => handlePageChange(currentPage - 1, selectedCategory, searchQuery)}
+                  onClick={() => handlePageChange(currentPage - 1, selectedCategory, searchQuery, sortBy)}
                   disabled={currentPage === 1}
                 >
                   &laquo; Précédent
@@ -230,7 +278,7 @@ const AllProducts = () => {
                 
                 <button
                   className="page-nav"
-                  onClick={() => handlePageChange(currentPage + 1, selectedCategory, searchQuery)}
+                  onClick={() => handlePageChange(currentPage + 1, selectedCategory, searchQuery, sortBy)}
                   disabled={currentPage === totalPages}
                 >
                   Suivant &raquo;
@@ -239,36 +287,22 @@ const AllProducts = () => {
             )}
           </>
         ) : (
-          <>
-            <div className="no-products">
-              <i className="fas fa-box-open"></i>
-              <h3>Aucun Produit Trouvé</h3>
-              <p>Aucun produit ne correspond à vos critères de recherche.</p>
-            </div>
-
-            {/* Show pagination even when no results on current page */}
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  className="page-nav"
-                  onClick={() => handlePageChange(currentPage - 1, selectedCategory, searchQuery)}
-                  disabled={currentPage === 1}
-                >
-                  &laquo; Précédent
-                </button>
-                
-                {renderPageNumbers()}
-                
-                <button
-                  className="page-nav"
-                  onClick={() => handlePageChange(currentPage + 1, selectedCategory, searchQuery)}
-                  disabled={currentPage === totalPages}
-                >
-                  Suivant &raquo;
-                </button>
-              </div>
+          <div className="no-products">
+            <i className="fas fa-box-open"></i>
+            <h3>Aucun Produit Trouvé</h3>
+            <p>Aucun produit ne correspond à vos critères de recherche.</p>
+            {searchQuery && (
+              <button 
+                className="clear-filters"
+                onClick={() => {
+                  setSearchQuery('');
+                  handlePageChange(1, selectedCategory, '', sortBy);
+                }}
+              >
+                Effacer les filtres
+              </button>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>

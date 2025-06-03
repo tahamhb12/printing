@@ -170,12 +170,8 @@ const Dashboard = () => {
   const [productData, setProductData] = useState({
     name: '',
     description: '',
-    /* price: '', */
     category: '',
-    variants: [
-      { variant: 'Color', options: [] },
-      { variant: 'Size', options: [] }
-    ]
+    variants: [] // Start with empty variants array
   });
   const [showEditModal, setShowEditModal] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -183,13 +179,9 @@ const Dashboard = () => {
   const [editFormData, setEditFormData] = useState({
     name: '',
     description: '',
-    /* price: '', */
     category: '',
     image_url: '',
-    variants: [
-      { variant: 'Color', options: [] },
-      { variant: 'Size', options: [] }
-    ]
+    variants: [] // Start with empty variants array
   });
   const [editPreviewUrl, setEditPreviewUrl] = useState(null);
 
@@ -226,6 +218,38 @@ const Dashboard = () => {
     };
   }, []);
 
+  // Add real-time subscription
+  useEffect(() => {
+    // Subscribe to changes in the products table
+    const subscription = supabase
+      .channel('products_changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'products' 
+        }, 
+        async (payload) => {
+          // Fetch the updated products list with pagination
+          const { data: updatedProducts, error } = await supabase
+            .from('products')
+            .select('*')
+            .range((currentPage - 1) * 8, currentPage * 8 - 1)
+            .order('created_at', { ascending: false });
+
+          if (!error && updatedProducts) {
+            setproducts(updatedProducts);
+          }
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on component unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [currentPage]); // Re-subscribe when page changes
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData(prevState => ({
@@ -258,39 +282,25 @@ const Dashboard = () => {
     }
   };
 
-  // Function to extract filename from Supabase public URL
-  const extractFilenameFromUrl = (url) => {
-    if (!url) return null;
-    try {
-      // Extract the filename from the Supabase storage URL
-      // URL format: https://xxx.supabase.co/storage/v1/object/public/product-images/filename
-      const urlParts = url.split('/');
-      return urlParts[urlParts.length - 1]; // Get the last part (filename)
-    } catch (error) {
-      console.error('Error extracting filename from URL:', error);
-      return null;
-    }
-  };
-
-  // Function to delete image from Supabase storage
+  // Function to delete image from R2 storage
   const deleteImage = async (imageUrl) => {
     try {
-      const filename = extractFilenameFromUrl(imageUrl);
-      if (!filename) {
-        console.warn('Could not extract filename from URL:', imageUrl);
-        return false;
+      // Extract filename from the R2 URL
+      const filename = imageUrl.split('/').pop();
+      
+      const response = await fetch(
+        `https://r2-upload-theta.vercel.app/api/delete/${filename}`,
+        {
+          method: 'DELETE'
+        }
+      );
+  
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error('Delete failed');
       }
-
-      const { error } = await supabase.storage
-        .from('product-images')
-        .remove([filename]);
-
-      if (error) {
-        console.error('Error deleting image:', error);
-        return false;
-      }
-
-      console.log('Successfully deleted image:', filename);
+  
       return true;
     } catch (error) {
       console.error('Error deleting image:', error);
@@ -298,27 +308,41 @@ const Dashboard = () => {
     }
   };
 
-  // Function to upload image to Supabase storage
-  const uploadImage = async (file, fileName) => {
+  // Function to upload image to R2 storage
+  const uploadImage = async (file) => {
     try {
-      const { data, error } = await supabase.storage
-        .from('product-images')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (error) {
-        console.error('Upload error:', error);
-        return null;
+      // Get signed URL
+      const response = await fetch('https://r2-upload-theta.vercel.app/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type
+        })
+      });
+  
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error('Failed to get upload URL');
       }
-
-      // Get public URL
-      const { data: publicUrlData } = supabase.storage
-        .from('product-images')
-        .getPublicUrl(fileName);
-
-      return publicUrlData.publicUrl;
+  
+      // Upload file using signed URL
+      const uploadResponse = await fetch(data.signedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type
+        }
+      });
+  
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed');
+      }
+  
+      return data.publicUrl; // Return the public URL from the R2 upload response
     } catch (error) {
       console.error('Error uploading image:', error);
       return null;
@@ -356,29 +380,37 @@ const Dashboard = () => {
         image_url: imageUrl
       };
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('products')
-        .insert([productWithImage])
-        .select()
-        .single();
+        .insert([productWithImage]);
 
       if (error) {
         console.log(error);
         alert('Error adding product');
       } else {
+        // Fetch updated products
+        const { data: updatedProducts, error: fetchError } = await supabase
+          .from('products')
+          .select('*')
+          .range((currentPage - 1) * 8, currentPage * 8 - 1)
+          .order('created_at', { ascending: false });
+
+        if (!fetchError && updatedProducts) {
+          setproducts(updatedProducts);
+        }
+
         // Reset form
         setProductData({
           name: '',
           description: '',
-          /* price: '', */
           category: '',
-          variants: [
-            { variant: 'Color', options: [] },
-            { variant: 'Size', options: [] }
-          ]
+          variants: []
         });
         setSelectedFile(null);
         setPreviewUrl(null);
+        
+        // Switch to edit tab
+        
         alert('Product added successfully');
       }
     } catch (error) {
@@ -394,15 +426,11 @@ const Dashboard = () => {
     setEditFormData({
       name: product.name || '',
       description: product.description || '',
-      /* price: product.price || '', */
       category: product.category || '',
       image_url: product.image_url || '',
-      variants: product.variants || [
-        { variant: 'Color', options: [] },
-        { variant: 'Size', options: [] }
-      ]
+      variants: product.variants || [] // Use product variants if they exist, otherwise empty array
     });
-    setEditPreviewUrl(product.image_url);
+    setEditPreviewUrl(null);
     setShowEditModal(true);
   };
 
@@ -419,86 +447,70 @@ const Dashboard = () => {
     setUploading(true);
 
     try {
-      let updateData = {
+      let imageUrl = editFormData.image_url;
+
+      // Handle image upload if a new image was selected
+      if (editSelectedFile) {
+        // Delete old image if it exists
+        if (editFormData.image_url) {
+          await deleteImage(editFormData.image_url);
+        }
+        imageUrl = await uploadImage(editSelectedFile);
+      }
+
+      // Filter out variants with empty names or no options
+      const validVariants = editFormData.variants.filter(variant => 
+        variant.variant.trim() !== '' && variant.options.length > 0
+      );
+
+      const updatedProduct = {
         name: editFormData.name,
-        /* price: editFormData.price, */
         description: editFormData.description,
         category: editFormData.category,
-        variants: editFormData.variants
+        image_url: imageUrl,
+        variants: validVariants // Only include valid variants
       };
 
-      // If new image is selected, upload it and delete the old one
-      if (editSelectedFile) {
-        const fileExt = editSelectedFile.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        
-        const imageUrl = await uploadImage(editSelectedFile, fileName);
-        
-        if (!imageUrl) {
-          alert('Error uploading image');
-          setUploading(false);
-          return;
-        }
-        
-        updateData.image_url = imageUrl;
+      const { error } = await supabase
+        .from('products')
+        .update(updatedProduct)
+        .eq('id', selectedProduct.id);
 
-        // Delete the old image after successful upload
-        if (selectedProduct.image_url) {
-          await deleteImage(selectedProduct.image_url);
-        }
-      }
+      if (error) throw error;
 
-      const { data, error } = await supabase
-        .from("products")
-        .update(updateData)
-        .eq("id", selectedProduct.id)
-        .select()
-        .single();
+      // Update local state
+      const updatedProducts = products.map(p => 
+        p.id === selectedProduct.id ? { ...p, ...updatedProduct } : p
+      );
+      setproducts(updatedProducts);
 
-      if (error) {
-        console.log(error.message);
-        alert('Error updating product');
-      } else {
-        // Fetch the updated products list with pagination
-        const { data: updatedProducts, error: fetchError } = await supabase
-          .from('products')
-          .select('*')
-          .range((currentPage - 1) * 8, currentPage * 8 - 1)
-          .order('created_at', { ascending: false });
-
-        if (fetchError) {
-          console.error('Error fetching updated products:', fetchError);
-        } else {
-          // Update the products in context
-          setproducts(updatedProducts);
-        }
-
-        // Reset form
-        setEditFormData({
-          name: '',
-          description: '',
-          /* price: '', */
-          category: '',
-          image_url: '',
-          variants: [
-            { variant: 'Color', options: [] },
-            { variant: 'Size', options: [] }
-          ]
-        });
-        setShowEditModal(false);
-        setEditSelectedFile(null);
-        setEditPreviewUrl(null);
-        alert("Product updated successfully");
-      }
+      setShowEditModal(false);
+      setEditFormData({
+        name: '',
+        description: '',
+        category: '',
+        image_url: '',
+        variants: []
+      });
+      setEditPreviewUrl(null);
+      setEditSelectedFile(null);
+      alert('Product updated successfully!');
     } catch (error) {
       console.error('Error updating product:', error);
-      alert('Error updating product');
+      alert('Error updating product. Please try again.');
     } finally {
       setUploading(false);
     }
   };
 
   const handleDeleteProduct = async (productId) => {
+    // Add confirmation dialog
+    const isConfirmed = window.confirm('Are you sure you want to delete this product? This action cannot be undone.');
+    
+    if (!isConfirmed) {
+      return; // Exit if user cancels
+    }
+
     try {
       // Find the product to get its image URL
       const productToDelete = products.find(product => product.id === productId);
@@ -536,13 +548,9 @@ const Dashboard = () => {
         setEditFormData({
           name: '',
           description: '',
-          /* price: '', */
           category: '',
           image_url: '',
-          variants: [
-            { variant: 'Color', options: [] },
-            { variant: 'Size', options: [] }
-          ]
+          variants: []
         });
         setShowEditModal(false);
         setEditSelectedFile(null);
@@ -638,21 +646,6 @@ const Dashboard = () => {
             </div>
 
             <div className="form-row">
-              {/* <div className="form-group">
-                <label htmlFor="price">Price ($)</label>
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={productData.price}
-                  onChange={handleChange}
-                  placeholder="0.00"
-                  step="0.01"
-                  min="0"
-                  required
-                />
-              </div> */}
-
               <div className="form-group">
                 <label htmlFor="category">Category</label>
                 <select
@@ -750,7 +743,6 @@ const Dashboard = () => {
               <th>Name</th>
               <th>Description</th>
               <th>Category</th>
-              {/* <th>Price</th> */}
               <th>Variants</th>
               <th>Actions</th>
             </tr>
@@ -770,7 +762,6 @@ const Dashboard = () => {
                 <td>{product.name || 'N/A'}</td>
                 <td>{product.description || 'N/A'}</td>
                 <td>{product.category || 'N/A'}</td>
-                {/* <td>${product.price || '0.00'}</td> */}
                 <td>
                   {product.variants && product.variants.length > 0 ? (
                     <div className="variants-list">
