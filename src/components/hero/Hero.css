@@ -109,13 +109,13 @@
     margin: 4rem auto 0;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
 }
 
 .feature {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
     background: #f8f9fa;
     border-radius: 12px;
     transition: all 0.3s ease;
@@ -173,6 +173,11 @@
     .secondary-btn{
         font-size: 16px;
     }
+
+    .hero-features {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -190,6 +195,7 @@
 
     .hero-features {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
 
     .feature {
@@ -219,4 +225,13 @@
         width: 100vw;
         max-width: none;
     }
+}
+
+.slider-image {
+  width: 100%;
+  height: auto;
+}
+
+.slick-slider {
+  margin-bottom: 3rem;
 } 

@@ -208,6 +208,14 @@
   opacity: 0.9;
 }
 
+.confirmation-note {
+  text-align: center;
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
 .brand {
   color: #666;
   font-size: 1.1rem;

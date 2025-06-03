@@ -53,12 +53,58 @@ const ProductDetails = () => {
 
   const formatPhoneNumber = (number) => {
     if (!number) return '';
-    const cleaned = number.replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (match) {
-      return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    return number.replace(/\D/g, ''); // Just return the numbers
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!phoneNumber || phoneNumber.length !== 10) {
+      alert('Please enter a valid phone number');
+      return;
     }
-    return number;
+
+    const url = 'https://script.google.com/macros/s/AKfycbxkfWAL1r7d_Z7dqrhYqd66AKY6F0lv-1fuM1VK1wGSFg9GK8_kntjRiBKMt8xQbI0NQA/exec';
+
+    const formData = {
+      name: product.name,
+      description: product.description,
+      variants: Object.entries(selectedVariants).map(([key, value]) => `${key}: ${value}`).join(', '),
+      quantite: quantity.toString(),
+      telephone: formatPhoneNumber(phoneNumber),
+      date: new Date().toISOString().split('T')[0] // Use current date
+    };
+
+    const body = Object.keys(formData)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(formData[key])}`)
+      .join('&');
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body
+      });
+      
+      const data = await response.text();
+      alert('Votre commande a été enregistrée avec succès! Nous vous contacterons bientôt.');
+      
+      // Reset form
+      setQuantity(1);
+      setPhoneNumber('');
+      if (product.variants) {
+        const initialVariants = {};
+        product.variants.forEach(variant => {
+          if (variant.options && variant.options.length > 0) {
+            initialVariants[variant.variant] = variant.options[0];
+          }
+        });
+        setSelectedVariants(initialVariants);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Désolé, une erreur est survenue. Veuillez réessayer.');
+    }
   };
 
   if (!product) {
@@ -145,17 +191,19 @@ const ProductDetails = () => {
           <input
             type="tel"
             id="phone"
-            value={formatPhoneNumber(phoneNumber)}
+            value={phoneNumber}
             onChange={handlePhoneChange}
-            placeholder="(123) 456-7890"
+            placeholder="0123456789"
             className="phone-input"
+            required
           />
         </div>
 
         <div className="product-actions">
-          <button className="add-to-cart-btn">
-            Ajouter au Panier
+          <button className="add-to-cart-btn" onClick={handleSubmit}>
+            Commander
           </button>
+          <p className="confirmation-note">Nous vous appellerons pour confirmer votre commande.</p>
         </div>
       </div>
     </div>
