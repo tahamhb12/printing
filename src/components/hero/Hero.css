@@ -230,8 +230,43 @@
 .slider-image {
   width: 100%;
   height: auto;
+  object-fit: cover;
+  max-height: 600px;
 }
 
 .slick-slider {
   margin-bottom: 3rem;
-} 
+  width: 100%;
+  overflow: hidden;
+}
+
+.slick-slide {
+  height: auto;
+}
+
+.slick-list {
+  overflow: hidden;
+}
+
+.slick-track {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .slider-image {
+    max-height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .slider-image {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-image {
+    max-height: 300px;
+  }
+}
